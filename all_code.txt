@@ -1,0 +1,3059 @@
+===== index.php =====
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protein Sequence Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #1f4e79;
+        }
+        label {
+            display: inline-block;
+            width: 160px;
+            vertical-align: top;
+            margin-top: 6px;
+        }
+        input[type="text"] {
+            width: 320px;
+            max-width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+        }
+        input[type="submit"] {
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+        .note {
+            color: #555;
+            font-size: 0.95em;
+        }
+        a {
+            color: #1f4e79;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Protein Sequence Analysis Website</h1>
+
+    <div class="box">
+        <p>Enter a protein family and a taxonomic group to retrieve protein sequences.</p>
+
+        <form action="fetch.php" method="post">
+            <label for="user_name">User Name:</label>
+            <input id="user_name" name="user_name" type="text" value="guest" maxlength="50" required><br>
+
+            <label for="family">Protein family:</label>
+            <input id="family" name="family" type="text" required><br>
+
+            <label for="taxon">Taxonomic group:</label>
+            <input id="taxon" name="taxon" type="text" required><br>
+
+            <input type="submit" value="Fetch sequences">
+        </form>
+
+        <p class="note">
+            The user name is only used as a history label to help filter previous queries.
+            It is not a login or authentication system.
+        </p>
+    </div>
+    <div class="box">
+        <h2>Example dataset</h2>
+        <p>
+            Explore a pre-computed example dataset based on
+            <strong>glucose-6-phosphatase proteins from Aves</strong>.
+        </p>
+        <p>
+            <a href="example.php">View example dataset</a>
+        </p>
+    </div>
+    
+    <p><a href="history.php">View history</a></p>
+    <p><a href="statement_of_credits.php">Statement of Credits</a></p>
+</body>
+</html>
+
+
+===== fetch.php =====
+<?php
+require_once __DIR__ . '/lib/db_connect.php';
+require_once __DIR__ . '/lib/cleanup_results.php';
+
+cleanup_old_results(__DIR__ . '/results', 60);
+
+$user_name = $_POST['user_name'] ?? 'guest';
+$family = $_POST['family'] ?? '';
+$taxon  = $_POST['taxon'] ?? '';
+
+$user_name = trim($user_name);
+$family = trim($family);
+$taxon  = trim($taxon);
+
+if ($user_name === '') {
+    $user_name = 'guest';
+}
+
+$result = null;
+$raw_output = '';
+$history_saved = false;
+$history_error = '';
+
+if ($family !== '' && $taxon !== '') {
+    $python = '/usr/bin/python3';
+    $script = __DIR__ . '/lib/fetch_sequences.py';
+
+    $command = $python . ' '
+             . escapeshellarg($script) . ' '
+             . escapeshellarg($family) . ' '
+             . escapeshellarg($taxon) . ' 2>&1';
+
+    $raw_output = shell_exec($command);
+    $result = json_decode($raw_output, true);
+
+    if (is_array($result) && isset($result['status']) && $result['status'] === 'ok') {
+        try {
+            $stmt = $pdo->prepare(
+                "INSERT INTO history (user, family, taxon, result_link) VALUES (?, ?, ?, ?)"
+            );
+            $stmt->execute([
+                $user_name,
+                $family,
+                $taxon,
+                $result['result_file']
+            ]);
+            $history_saved = true;
+        } catch (PDOException $e) {
+            $history_error = $e->getMessage();
+        }
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Sequences</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        .ok {
+            color: #0a6b2d;
+        }
+        .warn {
+            color: #a15c00;
+        }
+        .err {
+            color: #a10000;
+        }
+        code, pre {
+            background: #f3f3f3;
+            padding: 2px 4px;
+        }
+        a {
+            color: #1f4e79;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fetch Sequences</h1>
+
+    <div class="box">
+    <?php if ($family === '' || $taxon === ''): ?>
+        <p class="err"><strong>Error:</strong> missing protein family or taxonomic group.</p>
+
+    <?php elseif (!is_array($result)): ?>
+        <p class="err"><strong>Error:</strong> Python script did not return valid JSON.</p>
+        <pre><?php echo htmlspecialchars($raw_output); ?></pre>
+
+    <?php elseif ($result['status'] === 'empty'): ?>
+        <p><strong>User Name:</strong> <?php echo htmlspecialchars($user_name); ?></p>
+        <p><strong>NCBI query:</strong> <?php echo htmlspecialchars($result['term']); ?></p>
+        <p class="warn"><?php echo htmlspecialchars($result['message']); ?></p>
+
+    <?php elseif ($result['status'] === 'error'): ?>
+        <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($result['message']); ?></p>
+        <pre><?php echo htmlspecialchars($raw_output); ?></pre>
+
+    <?php else: ?>
+        <p><strong>User Name:</strong> <?php echo htmlspecialchars($user_name); ?></p>
+        <p><strong>Protein family:</strong> <?php echo htmlspecialchars($family); ?></p>
+        <p><strong>Taxonomic group:</strong> <?php echo htmlspecialchars($taxon); ?></p>
+        <p><strong>NCBI query:</strong> <?php echo htmlspecialchars($result['term']); ?></p>
+        <p><strong>Sequences retrieved:</strong> <?php echo htmlspecialchars((string)$result['sequence_count']); ?></p>
+        <p><strong>Saved FASTA:</strong>
+            <a href="<?php echo htmlspecialchars($result['result_file']); ?>">
+                <?php echo htmlspecialchars($result['result_file']); ?>
+            </a>
+        </p>
+
+        <p class="warn">
+            Result files are retained on the server for 60 days.
+            You can revisit recent analyses from the history page during this period.
+        </p>
+
+        <p>
+            <a href="analysis_status.php?file=<?php echo urlencode($result['result_file']); ?>">
+                Run conservation analysis
+            </a>
+        </p>
+        <p>
+            <a href="motif.php?file=<?php echo urlencode($result['result_file']); ?>">
+                Run motif scan
+            </a>
+        </p>
+
+        <?php if ($history_saved): ?>
+            <p class="ok"><strong>History:</strong> this query has been saved to the database.</p>
+        <?php elseif ($history_error !== ''): ?>
+            <p class="warn"><strong>History not saved:</strong> <?php echo htmlspecialchars($history_error); ?></p>
+        <?php endif; ?>
+
+        <h2>Preview (first 5 sequences)</h2>
+        <ul>
+            <?php foreach ($result['preview'] as $row): ?>
+                <li>
+                    <strong><?php echo htmlspecialchars($row['id']); ?></strong>
+                    (length: <?php echo htmlspecialchars((string)$row['length']); ?> aa)<br>
+                    <?php echo htmlspecialchars($row['description']); ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+    </div>
+
+    <p><a href="index.php">Back to home</a></p>
+    <p><a href="history.php">View history</a></p>
+</body>
+</html>
+
+
+===== analysis_status.php =====
+<?php
+$input_file = $_GET['file'] ?? '';
+$input_file = trim($input_file);
+
+if ($input_file === '') {
+    die('No input file was provided.');
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Running</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 24px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #1f4e79;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 5px solid #ddd;
+            border-top: 5px solid #1f4e79;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px 0;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .status {
+            font-weight: bold;
+            color: #1f4e79;
+        }
+        a {
+            color: #1f4e79;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .small {
+            color: #555;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Conservation analysis is running</h1>
+
+    <div class="box">
+        <p><strong>Input FASTA:</strong> <?php echo htmlspecialchars($input_file); ?></p>
+        <div class="spinner"></div>
+        <p class="status" id="statusText">Starting analysis...</p>
+        <p class="small">
+            This may take several minutes.
+        </p>
+        <p class="small">
+            Please keep this page open while the analysis is running.
+        </p>
+        <p class="small">
+            This page will automatically check for results and redirect when the analysis is finished.
+        </p>
+    </div>
+
+    <p><a href="index.php">Back to home</a></p>
+    <p><a href="history.php">View history</a></p>
+
+    <script>
+        const fileParam = <?php echo json_encode($input_file); ?>;
+        const runUrl = 'run_analysis.php?file=' + encodeURIComponent(fileParam);
+        const checkUrl = 'analysis_check.php?file=' + encodeURIComponent(fileParam);
+        const resultUrl = 'analyze.php?file=' + encodeURIComponent(fileParam);
+        const statusText = document.getElementById('statusText');
+
+        let started = false;
+
+        function startAnalysis() {
+            if (started) return;
+            started = true;
+
+            statusText.textContent = 'Analysis started. Waiting for server response...';
+
+            fetch(runUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'running') {
+                        statusText.textContent = 'Analysis is already running...';
+                    } else if (data.status === 'complete') {
+                        statusText.textContent = 'Analysis finished. Redirecting...';
+                        window.location.href = resultUrl;
+                    } else if (data.status === 'error') {
+                        statusText.textContent = 'Analysis failed: ' + data.message;
+                    } else {
+                        statusText.textContent = 'Analysis is running...';
+                    }
+                })
+                .catch(error => {
+                    statusText.textContent = 'Unable to start analysis request cleanly. Still checking results...';
+                });
+        }
+
+        function checkStatus() {
+            fetch(checkUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'complete') {
+                        statusText.textContent = 'Analysis finished. Redirecting...';
+                        window.location.href = resultUrl;
+                    } else if (data.status === 'running') {
+                        statusText.textContent = 'Analysis is still running...';
+                    } else if (data.status === 'pending') {
+                        statusText.textContent = 'Analysis has not finished yet...';
+                    } else if (data.status === 'error') {
+                        statusText.textContent = 'Status check error: ' + data.message;
+                    }
+                })
+                .catch(error => {
+                    statusText.textContent = 'Status check failed temporarily. Retrying...';
+                });
+        }
+
+        startAnalysis();
+        setInterval(checkStatus, 10000);
+    </script>
+</body>
+</html>
+
+
+===== analysis_check.php =====
+<?php
+header('Content-Type: application/json');
+
+$input_file = $_GET['file'] ?? '';
+$input_file = trim($input_file);
+
+$results_dir = realpath(__DIR__ . '/results');
+
+function json_error($msg) {
+    echo json_encode([
+        'status' => 'error',
+        'message' => $msg
+    ]);
+    exit;
+}
+
+if ($input_file === '') {
+    json_error('No input FASTA file was provided.');
+}
+
+$relative_input = ltrim($input_file, '/');
+$absolute_input = realpath(__DIR__ . '/' . $relative_input);
+
+if ($absolute_input === false || strpos($absolute_input, $results_dir) !== 0) {
+    json_error('Invalid input file path.');
+}
+
+$input_basename = pathinfo($absolute_input, PATHINFO_FILENAME);
+
+$aligned_absolute = $results_dir . '/aligned_' . $input_basename . '.fasta';
+$matrix_absolute  = $results_dir . '/aligned_' . $input_basename . '_identity_matrix.tsv';
+$summary_absolute = $results_dir . '/aligned_' . $input_basename . '_conservation_summary.json';
+$lock_absolute    = $results_dir . '/aligned_' . $input_basename . '.lock';
+
+if (file_exists($aligned_absolute) && file_exists($matrix_absolute) && file_exists($summary_absolute)) {
+    echo json_encode([
+        'status' => 'complete'
+    ]);
+    exit;
+}
+
+if (file_exists($lock_absolute)) {
+    echo json_encode([
+        'status' => 'running'
+    ]);
+    exit;
+}
+
+echo json_encode([
+    'status' => 'pending'
+]);
+
+
+===== run_analysis.php =====
+<?php
+header('Content-Type: application/json');
+ignore_user_abort(true);
+set_time_limit(0);
+
+$input_file = $_GET['file'] ?? '';
+$input_file = trim($input_file);
+
+$results_dir = realpath(__DIR__ . '/results');
+
+function json_error($msg, $extra = []) {
+    echo json_encode(array_merge([
+        'status' => 'error',
+        'message' => $msg
+    ], $extra));
+    exit;
+}
+
+if ($input_file === '') {
+    json_error('No input FASTA file was provided.');
+}
+
+$relative_input = ltrim($input_file, '/');
+$absolute_input = realpath(__DIR__ . '/' . $relative_input);
+
+if ($absolute_input === false || strpos($absolute_input, $results_dir) !== 0) {
+    json_error('Invalid input file path.');
+}
+
+if (!file_exists($absolute_input)) {
+    json_error('Input FASTA file does not exist.');
+}
+
+$input_basename = pathinfo($absolute_input, PATHINFO_FILENAME);
+
+$aligned_absolute = $results_dir . '/aligned_' . $input_basename . '.fasta';
+$matrix_absolute  = $results_dir . '/aligned_' . $input_basename . '_identity_matrix.tsv';
+$summary_absolute = $results_dir . '/aligned_' . $input_basename . '_conservation_summary.json';
+$lock_absolute    = $results_dir . '/aligned_' . $input_basename . '.lock';
+
+$clustalo = '/usr/bin/clustalo';
+$python = '/usr/bin/python3';
+$conservation_script = __DIR__ . '/lib/conservation_analysis.py';
+
+if (file_exists($aligned_absolute) && file_exists($matrix_absolute) && file_exists($summary_absolute)) {
+    echo json_encode([
+        'status' => 'complete',
+        'message' => 'Cached results already exist.'
+    ]);
+    exit;
+}
+
+if (file_exists($lock_absolute)) {
+    echo json_encode([
+        'status' => 'running',
+        'message' => 'Analysis is already running.'
+    ]);
+    exit;
+}
+
+file_put_contents($lock_absolute, date('c'));
+
+try {
+    if (!file_exists($aligned_absolute)) {
+        $align_command = $clustalo
+            . ' --threads=4'
+            . ' -i ' . escapeshellarg($absolute_input)
+            . ' -o ' . escapeshellarg($aligned_absolute)
+            . ' --force --outfmt=fasta 2>&1';
+
+        $align_output = shell_exec($align_command);
+
+        if (!file_exists($aligned_absolute)) {
+            @unlink($lock_absolute);
+            json_error('Alignment failed.', ['detail' => $align_output]);
+        }
+    }
+
+    $cons_command = $python . ' '
+        . escapeshellarg($conservation_script) . ' '
+        . escapeshellarg($aligned_absolute) . ' 2>&1';
+
+    $cons_output = shell_exec($cons_command);
+    $cons_result = json_decode($cons_output, true);
+
+    if (!is_array($cons_result)) {
+        @unlink($lock_absolute);
+        json_error('Conservation script did not return valid JSON.', ['detail' => $cons_output]);
+    }
+
+    if (($cons_result['status'] ?? '') !== 'ok') {
+        @unlink($lock_absolute);
+        json_error('Conservation analysis failed.', ['detail' => $cons_output]);
+    }
+
+    @unlink($lock_absolute);
+
+    echo json_encode([
+        'status' => 'complete',
+        'message' => 'Analysis finished successfully.'
+    ]);
+} catch (Throwable $e) {
+    @unlink($lock_absolute);
+    json_error($e->getMessage());
+}
+
+
+===== analyze.php =====
+<?php
+$input_file = $_GET['file'] ?? '';
+$input_file = trim($input_file);
+
+$results_dir = realpath(__DIR__ . '/results');
+
+function error_page($message) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Conservation Analysis</title>
+    </head>
+    <body>
+        <h1>Conservation Analysis</h1>
+        <p><strong>Error:</strong> <?php echo htmlspecialchars($message); ?></p>
+        <p><a href="index.php">Back to home</a></p>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
+if ($input_file === '') {
+    error_page('No input FASTA file was provided.');
+}
+
+$relative_input = ltrim($input_file, '/');
+$absolute_input = realpath(__DIR__ . '/' . $relative_input);
+
+if ($absolute_input === false || strpos($absolute_input, $results_dir) !== 0) {
+    error_page('Invalid input file path.');
+}
+
+if (!file_exists($absolute_input)) {
+    error_page('Input FASTA file does not exist.');
+}
+
+$input_basename = pathinfo($absolute_input, PATHINFO_FILENAME);
+$aligned_basename = 'aligned_' . $input_basename . '.fasta';
+$aligned_absolute = $results_dir . '/' . $aligned_basename;
+$aligned_relative = 'results/' . $aligned_basename;
+
+$conservation_script = __DIR__ . '/lib/conservation_analysis.py';
+$clustalo = '/usr/bin/clustalo';
+$python = '/usr/bin/python3';
+
+$align_command = $clustalo
+    . ' --threads=4'
+    . ' -i ' . escapeshellarg($absolute_input)
+    . ' -o ' . escapeshellarg($aligned_absolute)
+    . ' --force --outfmt=fasta 2>&1';
+
+$align_output = shell_exec($align_command);
+
+if (!file_exists($aligned_absolute)) {
+    error_page("Alignment failed.<br><pre>" . htmlspecialchars($align_output) . "</pre>");
+}
+
+$cons_command = $python . ' ' . escapeshellarg($conservation_script) . ' '
+              . escapeshellarg($aligned_absolute) . ' 2>&1';
+
+$cons_output = shell_exec($cons_command);
+$cons_result = json_decode($cons_output, true);
+
+if (!is_array($cons_result)) {
+    error_page("Conservation script did not return valid JSON.<br><pre>" . htmlspecialchars($cons_output) . "</pre>");
+}
+
+if (($cons_result['status'] ?? '') !== 'ok') {
+    $msg = $cons_result['message'] ?? 'Unknown error';
+    error_page("Conservation analysis failed: " . htmlspecialchars($msg) . "<br><pre>" . htmlspecialchars($cons_output) . "</pre>");
+}
+
+$matrix_relative = 'results/' . basename($cons_result['identity_matrix_file']);
+$summary_relative = 'results/' . basename($cons_result['summary_file']);
+
+$seq_count = $cons_result['sequence_count'];
+$align_length = $cons_result['alignment_length'];
+$avg_identity = $cons_result['average_pairwise_identity'];
+$min_identity = $cons_result['minimum_pairwise_identity'];
+$max_identity = $cons_result['maximum_pairwise_identity'];
+$avg_compared = $cons_result['average_compared_sites'];
+
+$interpretation = '';
+if ($avg_identity >= 80) {
+    $interpretation = 'These sequences appear highly conserved overall.';
+} elseif ($avg_identity >= 50) {
+    $interpretation = 'These sequences show moderate conservation overall, with both conserved and variable regions.';
+} else {
+    $interpretation = 'These sequences appear relatively diverse overall, suggesting substantial sequence variation.';
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conservation Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 950px;
+            margin: 40px auto;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #1f4e79;
+        }
+        a {
+            color: #1f4e79;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Conservation Analysis</h1>
+
+    <div class="box">
+        <h2>Input and output files</h2>
+        <ul>
+            <li><strong>Input FASTA:</strong> <a href="<?php echo htmlspecialchars($relative_input); ?>"><?php echo htmlspecialchars($relative_input); ?></a></li>
+            <li><strong>Aligned FASTA:</strong> <a href="<?php echo htmlspecialchars($aligned_relative); ?>"><?php echo htmlspecialchars($aligned_relative); ?></a></li>
+            <li><strong>Identity matrix:</strong> <a href="<?php echo htmlspecialchars($matrix_relative); ?>"><?php echo htmlspecialchars($matrix_relative); ?></a></li>
+            <li><strong>Summary JSON:</strong> <a href="<?php echo htmlspecialchars($summary_relative); ?>"><?php echo htmlspecialchars($summary_relative); ?></a></li>
+        </ul>
+        <p>
+            Result files are retained on the server for 60 days.
+            You can revisit recent analyses from the history page during this period.
+        </p>
+    </div>
+    <div class="box">
+        <h2>Next analyses</h2>
+        <p>
+            <a href="motif.php?file=<?php echo urlencode($relative_input); ?>">
+                Run motif scan for this sequence set
+            </a>
+        </p>
+        <p>
+            <a href="tree.php?file=<?php echo urlencode($aligned_relative); ?>">
+                Run phylogenetic tree analysis for this aligned sequence set
+            </a>
+        </p>
+    </div>
+
+    <div class="box">
+        <h2>Alignment summary</h2>
+        <p><strong>Sequence count:</strong> <?php echo htmlspecialchars((string)$seq_count); ?></p>
+        <p><strong>Alignment length:</strong> <?php echo htmlspecialchars((string)$align_length); ?> aa</p>
+        <p><strong>Average pairwise identity:</strong> <?php echo htmlspecialchars((string)$avg_identity); ?>%</p>
+        <p><strong>Minimum pairwise identity:</strong> <?php echo htmlspecialchars((string)$min_identity); ?>%</p>
+        <p><strong>Maximum pairwise identity:</strong> <?php echo htmlspecialchars((string)$max_identity); ?>%</p>
+        <p><strong>Average compared non-gap sites:</strong> <?php echo htmlspecialchars((string)$avg_compared); ?></p>
+    </div>
+
+    <div class="box">
+        <h2>Initial interpretation</h2>
+        <p><?php echo htmlspecialchars($interpretation); ?></p>
+        <p>
+            A high maximum identity together with a much lower minimum identity suggests that
+            this dataset likely contains both closely related sequences and more divergent isoforms
+            or homologous proteins within the chosen taxonomic group.
+        </p>
+    </div>
+
+    <p><a href="index.php">Back to home</a></p>
+    <p><a href="history.php">View history</a></p>
+</body>
+</html>
+
+
+===== motif.php =====
+<?php
+$input_file = $_GET['file'] ?? '';
+$input_file = trim($input_file);
+
+$results_dir = realpath(__DIR__ . '/results');
+
+function error_page($message, $detail = '') {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Motif Scan</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 1100px;
+                margin: 40px auto;
+                line-height: 1.6;
+                padding: 0 20px;
+            }
+            .box {
+                border: 1px solid #ccc;
+                padding: 20px;
+                border-radius: 8px;
+                background: #f9f9f9;
+                margin-bottom: 20px;
+            }
+            .err {
+                color: #a10000;
+            }
+            pre {
+                white-space: pre-wrap;
+                word-break: break-word;
+                background: #f3f3f3;
+                padding: 12px;
+                border-radius: 6px;
+                overflow-x: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Motif / Domain Scan</h1>
+        <div class="box">
+            <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($message); ?></p>
+            <?php if ($detail !== ''): ?>
+                <pre><?php echo htmlspecialchars($detail); ?></pre>
+            <?php endif; ?>
+        </div>
+        <p><a href="index.php">Back to home</a></p>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
+if ($input_file === '') {
+    error_page('No input FASTA file was provided.');
+}
+
+$relative_input = ltrim($input_file, '/');
+$absolute_input = realpath(__DIR__ . '/' . $relative_input);
+
+if ($absolute_input === false || strpos($absolute_input, $results_dir) !== 0) {
+    error_page('Invalid input file path.');
+}
+
+if (!file_exists($absolute_input)) {
+    error_page('Input FASTA file does not exist.');
+}
+
+$input_basename = pathinfo($absolute_input, PATHINFO_FILENAME);
+
+$summary_basename = $input_basename . '_motif_summary.json';
+$summary_absolute = $results_dir . '/' . $summary_basename;
+$summary_relative = 'results/' . $summary_basename;
+
+$raw_basename = $input_basename . '_motif_raw.txt';
+$raw_absolute = $results_dir . '/' . $raw_basename;
+$raw_relative = 'results/' . $raw_basename;
+
+$python = '/usr/bin/python3';
+$script = __DIR__ . '/lib/motif_scan.py';
+
+$data = null;
+$scan_output = '';
+
+if (!file_exists($summary_absolute)) {
+    $command = $python . ' '
+        . escapeshellarg($script) . ' '
+        . escapeshellarg($absolute_input) . ' 2>&1';
+
+    $scan_output = shell_exec($command);
+    $scan_result = json_decode($scan_output, true);
+
+    if (!is_array($scan_result)) {
+        error_page('Motif scan did not return valid JSON.', $scan_output);
+    }
+
+    if (($scan_result['status'] ?? '') !== 'ok') {
+        $msg = $scan_result['message'] ?? 'Unknown error';
+        error_page('Motif scan failed: ' . $msg, $scan_output);
+    }
+
+    file_put_contents(
+        $summary_absolute,
+        json_encode($scan_result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+    );
+
+    if (!empty($scan_result['combined_raw_report'])) {
+        file_put_contents($raw_absolute, $scan_result['combined_raw_report']);
+    }
+
+    $data = $scan_result;
+} else {
+    $json_text = file_get_contents($summary_absolute);
+    if ($json_text === false) {
+        error_page('Could not read motif summary JSON file.');
+    }
+
+    $data = json_decode($json_text, true);
+    if (!is_array($data)) {
+        error_page('Saved motif summary JSON is invalid.');
+    }
+
+    if (!file_exists($raw_absolute) && !empty($data['combined_raw_report'])) {
+        file_put_contents($raw_absolute, $data['combined_raw_report']);
+    }
+}
+
+if (($data['status'] ?? '') !== 'ok') {
+    error_page('Saved motif summary JSON does not contain a successful result.');
+}
+
+$sequence_count = $data['sequence_count'] ?? 0;
+$sequences_with_hits = $data['sequences_with_hits'] ?? 0;
+$total_hits = $data['total_hits'] ?? 0;
+$combined_raw_report = $data['combined_raw_report'] ?? '';
+
+$sequence_rows = [];
+$hit_rows = [];
+
+foreach (($data['results'] ?? []) as $seq_result) {
+    $seq_id = $seq_result['sequence_id'] ?? '';
+    $seq_length = $seq_result['length'] ?? '';
+    $hit_count = $seq_result['hit_count'] ?? 0;
+
+    if ($hit_count > 0) {
+        $sequence_rows[] = [
+            'sequence_id' => $seq_id,
+            'length' => $seq_length,
+            'hit_count' => $hit_count
+        ];
+    }
+
+    foreach (($seq_result['hits'] ?? []) as $hit) {
+        $hit_rows[] = [
+            'sequence_id' => $seq_id,
+            'motif' => $hit['motif'] ?? '',
+            'start' => $hit['start'] ?? '',
+            'end' => $hit['end'] ?? '',
+            'length' => $hit['length'] ?? ''
+        ];
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motif Scan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 40px auto;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #1f4e79;
+        }
+        a {
+            color: #1f4e79;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .note {
+            color: #555;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #eaf2f8;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #f3f3f3;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        details {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Motif / Domain Scan</h1>
+
+    <div class="box">
+        <h2>Input and output files</h2>
+        <p><strong>Input FASTA:</strong>
+            <a href="<?php echo htmlspecialchars($relative_input); ?>">
+                <?php echo htmlspecialchars($relative_input); ?>
+            </a>
+        </p>
+        <p><strong>Motif summary JSON:</strong>
+            <a href="<?php echo htmlspecialchars($summary_relative); ?>">
+                <?php echo htmlspecialchars($summary_relative); ?>
+            </a>
+        </p>
+        <?php if (file_exists($raw_absolute)): ?>
+            <p><strong>Combined raw motif report:</strong>
+                <a href="<?php echo htmlspecialchars($raw_relative); ?>">
+                    <?php echo htmlspecialchars($raw_relative); ?>
+                </a>
+            </p>
+        <?php endif; ?>
+        <p class="note">
+            Result files are retained on the server for 60 days.
+            You can revisit recent analyses from the history page during this period.
+        </p>
+    </div>
+
+    <div class="box">
+        <h2>Scan summary</h2>
+        <p><strong>Total sequences scanned:</strong> <?php echo htmlspecialchars((string)$sequence_count); ?></p>
+        <p><strong>Sequences with motif hits:</strong> <?php echo htmlspecialchars((string)$sequences_with_hits); ?></p>
+        <p><strong>Total motif hits:</strong> <?php echo htmlspecialchars((string)$total_hits); ?></p>
+
+        <?php if ($total_hits == 0): ?>
+            <p>No PROSITE motifs were detected in this sequence set.</p>
+        <?php else: ?>
+            <p>
+                This sequence set contains PROSITE motif hits in a subset of sequences.
+                The table below lists the motif type and its position in each sequence.
+            </p>
+        <?php endif; ?>
+    </div>
+
+    <div class="box">
+        <h2>Sequences with motif hits</h2>
+        <?php if (empty($sequence_rows)): ?>
+            <p>No sequences with motif hits were found.</p>
+        <?php else: ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sequence ID</th>
+                        <th>Sequence length (aa)</th>
+                        <th>Hit count</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($sequence_rows as $row): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['sequence_id']); ?></td>
+                            <td><?php echo htmlspecialchars((string)$row['length']); ?></td>
+                            <td><?php echo htmlspecialchars((string)$row['hit_count']); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </div>
+
+    <div class="box">
+        <h2>Motif hit table</h2>
+        <?php if (empty($hit_rows)): ?>
+            <p>No motif hit positions are available.</p>
+        <?php else: ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sequence ID</th>
+                        <th>Motif</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Motif length</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($hit_rows as $row): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['sequence_id']); ?></td>
+                            <td><?php echo htmlspecialchars($row['motif']); ?></td>
+                            <td><?php echo htmlspecialchars((string)$row['start']); ?></td>
+                            <td><?php echo htmlspecialchars((string)$row['end']); ?></td>
+                            <td><?php echo htmlspecialchars((string)$row['length']); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </div>
+
+    <div class="box">
+        <h2>Raw report</h2>
+        <?php if ($combined_raw_report === ''): ?>
+            <p>No raw report text is available.</p>
+        <?php else: ?>
+            <details>
+                <summary>Show raw combined report</summary>
+                <pre><?php echo htmlspecialchars($combined_raw_report); ?></pre>
+            </details>
+        <?php endif; ?>
+    </div>
+
+    <p><a href="index.php">Back to home</a></p>
+    <p><a href="history.php">View history</a></p>
+</body>
+</html>
+
+
+===== tree.php =====
+<?php
+$input_file = $_GET['file'] ?? '';
+$input_file = trim($input_file);
+
+$results_dir = realpath(__DIR__ . '/results');
+
+function error_page($message, $detail = '') {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Phylogenetic Tree Analysis</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 1100px;
+                margin: 40px auto;
+                line-height: 1.6;
+                padding: 0 20px;
+            }
+            .box {
+                border: 1px solid #ccc;
+                padding: 20px;
+                border-radius: 8px;
+                background: #f9f9f9;
+                margin-bottom: 20px;
+            }
+            .err {
+                color: #a10000;
+            }
+            pre {
+                white-space: pre-wrap;
+                word-break: break-word;
+                background: #f3f3f3;
+                padding: 12px;
+                border-radius: 6px;
+                overflow-x: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Phylogenetic Tree Analysis</h1>
+        <div class="box">
+            <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($message); ?></p>
+            <?php if ($detail !== ''): ?>
+                <pre><?php echo htmlspecialchars($detail); ?></pre>
+            <?php endif; ?>
+        </div>
+        <p><a href="index.php">Back to home</a></p>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
+if ($input_file === '') {
+    error_page('No aligned FASTA file was provided.');
+}
+
+$relative_input = ltrim($input_file, '/');
+$absolute_input = realpath(__DIR__ . '/' . $relative_input);
+
+if ($absolute_input === false || strpos($absolute_input, $results_dir) !== 0) {
+    error_page('Invalid input file path.');
+}
+
+if (!file_exists($absolute_input)) {
+    error_page('Aligned FASTA file does not exist.');
+}
+
+$input_basename = pathinfo($absolute_input, PATHINFO_FILENAME);
+
+$summary_basename = $input_basename . '_tree_summary.json';
+$summary_absolute = $results_dir . '/' . $summary_basename;
+$summary_relative = 'results/' . $summary_basename;
+
+$tree_basename = $input_basename . '_nj_tree.nwk';
+$tree_absolute = $results_dir . '/' . $tree_basename;
+$tree_relative = 'results/' . $tree_basename;
+
+$png_basename = $input_basename . '_nj_tree.png';
+$png_absolute = $results_dir . '/' . $png_basename;
+$png_relative = 'results/' . $png_basename;
+
+$python = '/usr/bin/python3';
+$script = __DIR__ . '/lib/tree_analysis.py';
+
+$data = null;
+$run_output = '';
+
+if (!file_exists($summary_absolute)) {
+    $command = $python . ' '
+        . escapeshellarg($script) . ' '
+        . escapeshellarg($absolute_input) . ' 2>&1';
+
+    $run_output = shell_exec($command);
+
+    $json_text = trim($run_output);
+    $json_start = strpos($json_text, '{');
+    if ($json_start !== false) {
+        $json_text = substr($json_text, $json_start);
+    }
+
+    $run_result = json_decode($json_text, true);
+
+    if (!is_array($run_result)) {
+        error_page('Tree analysis did not return valid JSON.', $run_output);
+    }
+
+    if (($run_result['status'] ?? '') !== 'ok') {
+        $msg = $run_result['message'] ?? 'Unknown error';
+        error_page('Tree analysis failed: ' . $msg, $run_output);
+    }
+
+    file_put_contents(
+        $summary_absolute,
+        json_encode($run_result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+    );
+
+    $data = $run_result;
+} else {
+    $json_text = file_get_contents($summary_absolute);
+    if ($json_text === false) {
+        error_page('Could not read tree summary JSON file.');
+    }
+
+    $data = json_decode($json_text, true);
+    if (!is_array($data)) {
+        error_page('Saved tree summary JSON is invalid.');
+    }
+}
+
+if (($data['status'] ?? '') !== 'ok') {
+    error_page('Saved tree summary JSON does not contain a successful result.');
+}
+
+$sequence_count = $data['sequence_count'] ?? 0;
+$min_distance = $data['min_distance'] ?? '';
+$max_distance = $data['max_distance'] ?? '';
+$average_distance = $data['average_distance'] ?? '';
+$png_created = $data['png_created'] ?? false;
+$png_error = $data['png_error'] ?? '';
+
+$interpretation = '';
+if (is_numeric($average_distance)) {
+    if ($average_distance < 0.15) {
+        $interpretation = 'The aligned sequences are very similar overall, so the tree is expected to contain short branch lengths and closely clustered sequences.';
+    } elseif ($average_distance < 0.35) {
+        $interpretation = 'The aligned sequences show moderate divergence overall, suggesting a mixture of closely related and more distinct proteins.';
+    } else {
+        $interpretation = 'The aligned sequences show substantial divergence overall, so the tree is likely to contain several clearly separated branches.';
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phylogenetic Tree Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 40px auto;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #1f4e79;
+        }
+        a {
+            color: #1f4e79;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .note {
+            color: #555;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            background: white;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #f3f3f3;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Phylogenetic Tree Analysis</h1>
+
+    <div class="box">
+        <h2>Input and output files</h2>
+        <p><strong>Aligned FASTA:</strong>
+            <a href="<?php echo htmlspecialchars($relative_input); ?>">
+                <?php echo htmlspecialchars($relative_input); ?>
+            </a>
+        </p>
+        <p><strong>Tree summary JSON:</strong>
+            <a href="<?php echo htmlspecialchars($summary_relative); ?>">
+                <?php echo htmlspecialchars($summary_relative); ?>
+            </a>
+        </p>
+        <p><strong>Newick tree file:</strong>
+            <a href="<?php echo htmlspecialchars($tree_relative); ?>">
+                <?php echo htmlspecialchars($tree_relative); ?>
+            </a>
+        </p>
+        <?php if ($png_created && file_exists($png_absolute)): ?>
+            <p><strong>Tree image:</strong>
+                <a href="<?php echo htmlspecialchars($png_relative); ?>">
+                    <?php echo htmlspecialchars($png_relative); ?>
+                </a>
+            </p>
+        <?php endif; ?>
+        <p class="note">
+            Result files are retained on the server for 60 days.
+            You can revisit recent analyses from the history page during this period.
+        </p>
+    </div>
+
+    <div class="box">
+        <h2>Tree summary</h2>
+        <p><strong>Total sequences in tree:</strong> <?php echo htmlspecialchars((string)$sequence_count); ?></p>
+        <p><strong>Minimum pairwise distance:</strong> <?php echo htmlspecialchars((string)$min_distance); ?></p>
+        <p><strong>Maximum pairwise distance:</strong> <?php echo htmlspecialchars((string)$max_distance); ?></p>
+        <p><strong>Average pairwise distance:</strong> <?php echo htmlspecialchars((string)$average_distance); ?></p>
+    </div>
+
+    <div class="box">
+        <h2>Initial interpretation</h2>
+        <p><?php echo htmlspecialchars($interpretation); ?></p>
+        <p>
+            This neighbour-joining tree provides a simple overview of how closely related the
+            retrieved proteins are within the selected taxonomic group.
+        </p>
+    </div>
+
+    <div class="box">
+        <h2>Tree image</h2>
+        <?php if ($png_created && file_exists($png_absolute)): ?>
+            <img src="<?php echo htmlspecialchars($png_relative); ?>" alt="Neighbour-joining tree">
+        <?php else: ?>
+            <p>PNG tree image is not available.</p>
+            <?php if ($png_error !== ''): ?>
+                <pre><?php echo htmlspecialchars($png_error); ?></pre>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+
+    <p><a href="index.php">Back to home</a></p>
+    <p><a href="history.php">View history</a></p>
+</body>
+</html>
+
+
+
+===== history.php =====
+<?php
+require_once __DIR__ . '/lib/db_connect.php';
+
+$filter_user = trim($_GET['user_name'] ?? '');
+$filter_family = trim($_GET['family'] ?? '');
+$filter_taxon = trim($_GET['taxon'] ?? '');
+
+$rows = [];
+$db_error = '';
+
+try {
+    $sql = "
+        SELECT id, user, family, taxon, result_link, created_at
+        FROM history
+    ";
+
+    $conditions = [];
+    $params = [];
+
+    if ($filter_user !== '') {
+        $conditions[] = "user = ?";
+        $params[] = $filter_user;
+    }
+
+    if ($filter_family !== '') {
+        $conditions[] = "family LIKE ?";
+        $params[] = '%' . $filter_family . '%';
+    }
+
+    if ($filter_taxon !== '') {
+        $conditions[] = "taxon LIKE ?";
+        $params[] = '%' . $filter_taxon . '%';
+    }
+
+    if (!empty($conditions)) {
+        $sql .= " WHERE " . implode(" AND ", $conditions);
+    }
+
+    $sql .= " ORDER BY created_at DESC, id DESC";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $db_error = $e->getMessage();
+}
+
+$results_dir = realpath(__DIR__ . '/results');
+
+function file_exists_in_results($relative_path, $results_dir) {
+    $relative_path = ltrim($relative_path, '/');
+    $absolute_path = realpath(__DIR__ . '/' . $relative_path);
+
+    if ($absolute_path === false) {
+        return false;
+    }
+
+    return strpos($absolute_path, $results_dir) === 0 && file_exists($absolute_path);
+}
+
+function aligned_relative_from_raw($raw_relative) {
+    $raw_relative = ltrim($raw_relative, '/');
+    $base = pathinfo($raw_relative, PATHINFO_FILENAME);
+    return 'results/aligned_' . $base . '.fasta';
+}
+
+$available_rows = [];
+$unavailable_rows = [];
+
+foreach ($rows as $row) {
+    $raw_relative = ltrim($row['result_link'], '/');
+    $raw_exists = file_exists_in_results($raw_relative, $results_dir);
+
+    $aligned_relative = aligned_relative_from_raw($raw_relative);
+    $aligned_exists = file_exists_in_results($aligned_relative, $results_dir);
+
+    $record = [
+        'id' => $row['id'],
+        'user' => $row['user'] ?? '',
+        'family' => $row['family'] ?? '',
+        'taxon' => $row['taxon'] ?? '',
+        'created_at' => $row['created_at'] ?? '',
+        'raw_relative' => $raw_relative,
+        'raw_exists' => $raw_exists,
+        'aligned_relative' => $aligned_relative,
+        'aligned_exists' => $aligned_exists,
+        'is_example' => (
+            ($row['user'] ?? '') === 'example_dataset' ||
+            strpos($raw_relative, 'results/examples/') === 0
+        )
+    ];
+
+    if ($raw_exists) {
+        $available_rows[] = $record;
+    } else {
+        $unavailable_rows[] = $record;
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 40px auto;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #1f4e79;
+        }
+        a {
+            color: #1f4e79;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        form.filter-form {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 10px 12px;
+            align-items: center;
+            max-width: 760px;
+        }
+        input[type="text"] {
+            padding: 8px;
+            width: 100%;
+            max-width: 420px;
+        }
+        .button-row {
+            grid-column: 2;
+        }
+        input[type="submit"], .clear-link {
+            padding: 9px 14px;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .clear-link {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #f3f3f3;
+            color: #333;
+            text-decoration: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #eaf2f8;
+        }
+        .warn {
+            color: #a15c00;
+        }
+        .err {
+            color: #a10000;
+        }
+        .small {
+            color: #555;
+            font-size: 0.95em;
+        }
+        details {
+            margin-top: 10px;
+        }
+        summary {
+            cursor: pointer;
+            font-weight: bold;
+            color: #1f4e79;
+        }
+    </style>
+</head>
+<body>
+    <h1>Query History</h1>
+
+    <div class="box">
+        <p>
+            This page lists previous sequence retrievals saved in the database.
+            You can filter records by user name, protein family, and taxonomic group.
+        </p>
+        <p class="small">
+            Result files are retained on the server for 60 days.
+            Older files may no longer be available even if the database entry still exists.
+        </p>
+    </div>
+
+    <div class="box">
+        <h2>Filter history</h2>
+        <form class="filter-form" method="get" action="history.php">
+            <label for="user_name">User Name:</label>
+            <input id="user_name" name="user_name" type="text" value="<?php echo htmlspecialchars($filter_user); ?>">
+
+            <label for="family">Protein Family:</label>
+            <input id="family" name="family" type="text" value="<?php echo htmlspecialchars($filter_family); ?>">
+
+            <label for="taxon">Taxonomic Group:</label>
+            <input id="taxon" name="taxon" type="text" value="<?php echo htmlspecialchars($filter_taxon); ?>">
+
+            <div></div>
+            <div class="button-row">
+                <input type="submit" value="Filter">
+                <a class="clear-link" href="history.php">Clear</a>
+            </div>
+        </form>
+    </div>
+
+    <?php if ($db_error !== ''): ?>
+        <div class="box">
+            <p class="err"><strong>Database error:</strong> <?php echo htmlspecialchars($db_error); ?></p>
+        </div>
+
+    <?php else: ?>
+
+        <div class="box">
+            <h2>Available records</h2>
+
+            <?php if (empty($available_rows)): ?>
+                <p>No currently available records were found for this filter.</p>
+            <?php else: ?>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User</th>
+                            <th>Protein family</th>
+                            <th>Taxonomic group</th>
+                            <th>Saved at</th>
+                            <th>Available links</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($available_rows as $row): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars((string)$row['id']); ?></td>
+                                <td><?php echo htmlspecialchars($row['user']); ?></td>
+                                <td><?php echo htmlspecialchars($row['family']); ?></td>
+                                <td><?php echo htmlspecialchars($row['taxon']); ?></td>
+                                <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                                <td>
+                                    <?php if ($row['is_example']): ?>
+                                        <div>
+                                            <a href="example.php">Example dataset page</a>
+                                        </div>
+                                        <div>
+                                            <a href="<?php echo htmlspecialchars($row['raw_relative']); ?>">Raw FASTA</a>
+                                        </div>
+                                        <?php if ($row['aligned_exists']): ?>
+                                            <div>
+                                                <a href="<?php echo htmlspecialchars($row['aligned_relative']); ?>">Aligned FASTA</a>
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <div>
+                                            <a href="<?php echo htmlspecialchars($row['raw_relative']); ?>">Raw FASTA</a>
+                                        </div>
+                                        <div>
+                                            <a href="analyze.php?file=<?php echo urlencode($row['raw_relative']); ?>">
+                                                Conservation analysis
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a href="motif.php?file=<?php echo urlencode($row['raw_relative']); ?>">
+                                                Motif scan
+                                            </a>
+                                        </div>
+
+                                        <?php if ($row['aligned_exists']): ?>
+                                            <div>
+                                                <a href="tree.php?file=<?php echo urlencode($row['aligned_relative']); ?>">
+                                                    Phylogenetic tree
+                                                </a>
+                                            </div>
+                                        <?php else: ?>
+                                            <div class="small">Tree link will appear after conservation output exists.</div>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
+        </div>
+
+        <div class="box">
+            <details>
+                <summary>Unavailable / expired records (<?php echo count($unavailable_rows); ?>)</summary>
+
+                <?php if (empty($unavailable_rows)): ?>
+                    <p>No unavailable records were found for this filter.</p>
+                <?php else: ?>
+                    <p class="small">
+                        These records remain in the database as query history, but their raw FASTA files
+                        are no longer present on the server.
+                    </p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Protein family</th>
+                                <th>Taxonomic group</th>
+                                <th>Saved at</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($unavailable_rows as $row): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars((string)$row['id']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['user']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['family']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['taxon']); ?></td>
+                                    <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                                    <td class="warn">Raw FASTA file is no longer available.</td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            </details>
+        </div>
+
+    <?php endif; ?>
+
+    <p><a href="index.php">Back to home</a></p>
+</body>
+</html>
+
+
+===== example.php =====
+<?php
+$example_files = [
+    'raw_fasta' => 'results/examples/glucose-6-phosphatase_Aves_example.fasta',
+    'aligned_fasta' => 'results/examples/aligned_glucose-6-phosphatase_Aves_example.fasta',
+    'identity_matrix' => 'results/examples/aligned_glucose-6-phosphatase_Aves_example_identity_matrix.tsv',
+    'conservation_summary' => 'results/examples/aligned_glucose-6-phosphatase_Aves_example_conservation_summary.json',
+    'motif_summary' => 'results/examples/glucose-6-phosphatase_Aves_example_motif_summary.json',
+    'motif_raw' => 'results/examples/glucose-6-phosphatase_Aves_example_motif_raw.txt',
+    'tree_newick' => 'results/examples/aligned_glucose-6-phosphatase_Aves_example_nj_tree.nwk',
+    'tree_png' => 'results/examples/aligned_glucose-6-phosphatase_Aves_example_nj_tree.png',
+    'tree_summary' => 'results/examples/aligned_glucose-6-phosphatase_Aves_example_tree_summary.json'
+];
+
+function error_page($message, $detail = '') {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Example Dataset</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                max-width: 1000px;
+                margin: 40px auto;
+                line-height: 1.6;
+                padding: 0 20px;
+            }
+            .box {
+                border: 1px solid #ccc;
+                padding: 20px;
+                border-radius: 8px;
+                background: #f9f9f9;
+                margin-bottom: 20px;
+            }
+            .err {
+                color: #a10000;
+            }
+            pre {
+                white-space: pre-wrap;
+                word-break: break-word;
+                background: #f3f3f3;
+                padding: 12px;
+                border-radius: 6px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Example Dataset</h1>
+        <div class="box">
+            <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($message); ?></p>
+            <?php if ($detail !== ''): ?>
+                <pre><?php echo htmlspecialchars($detail); ?></pre>
+            <?php endif; ?>
+        </div>
+        <p><a href="index.php">Back to home</a></p>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
+function load_json_file($relative_path) {
+    $absolute_path = __DIR__ . '/' . $relative_path;
+    if (!file_exists($absolute_path)) {
+        return [false, "Missing file: $relative_path"];
+    }
+
+    $text = file_get_contents($absolute_path);
+    if ($text === false) {
+        return [false, "Could not read file: $relative_path"];
+    }
+
+    $data = json_decode($text, true);
+    if (!is_array($data)) {
+        return [false, "Invalid JSON in file: $relative_path"];
+    }
+
+    return [$data, ''];
+}
+
+$missing = [];
+foreach ($example_files as $label => $relative_path) {
+    if (!file_exists(__DIR__ . '/' . $relative_path)) {
+        $missing[] = $relative_path;
+    }
+}
+
+if (!empty($missing)) {
+    error_page(
+        'One or more example dataset files are missing.',
+        implode("\n", $missing)
+    );
+}
+
+list($conservation_data, $cons_error) = load_json_file($example_files['conservation_summary']);
+if ($conservation_data === false) {
+    error_page('Could not load conservation summary JSON.', $cons_error);
+}
+
+list($motif_data, $motif_error) = load_json_file($example_files['motif_summary']);
+if ($motif_data === false) {
+    error_page('Could not load motif summary JSON.', $motif_error);
+}
+
+list($tree_data, $tree_error) = load_json_file($example_files['tree_summary']);
+if ($tree_data === false) {
+    error_page('Could not load tree summary JSON.', $tree_error);
+}
+
+$motif_hits = [];
+foreach (($motif_data['results'] ?? []) as $seq_result) {
+    $seq_id = $seq_result['sequence_id'] ?? '';
+    foreach (($seq_result['hits'] ?? []) as $hit) {
+        $motif_hits[] = [
+            'sequence_id' => $seq_id,
+            'motif' => $hit['motif'] ?? '',
+            'start' => $hit['start'] ?? '',
+            'end' => $hit['end'] ?? '',
+            'length' => $hit['length'] ?? ''
+        ];
+    }
+}
+
+$tree_png_exists = file_exists(__DIR__ . '/' . $example_files['tree_png']);
+$motif_raw_text = file_get_contents(__DIR__ . '/' . $example_files['motif_raw']);
+if ($motif_raw_text === false) {
+    $motif_raw_text = '';
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example Dataset</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1100px;
+            margin: 40px auto;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #1f4e79;
+        }
+        a {
+            color: #1f4e79;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .note {
+            color: #555;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #eaf2f8;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            background: white;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #f3f3f3;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        details {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Example Dataset</h1>
+
+    <div class="box">
+        <p>
+            This is the pre-processed example dataset:
+            <strong>glucose-6-phosphatase proteins from Aves</strong>.
+        </p>
+        <p class="note">
+            This page presents a fixed example dataset with pre-computed results. No new retrieval or analysis is performed when viewing this page.
+        </p>
+    </div>
+
+    <div class="box">
+        <h2>Example files</h2>
+        <ul>
+            <li><a href="<?php echo htmlspecialchars($example_files['raw_fasta']); ?>">Raw FASTA</a></li>
+            <li><a href="<?php echo htmlspecialchars($example_files['aligned_fasta']); ?>">Aligned FASTA</a></li>
+            <li><a href="<?php echo htmlspecialchars($example_files['identity_matrix']); ?>">Identity matrix</a></li>
+            <li><a href="<?php echo htmlspecialchars($example_files['conservation_summary']); ?>">Conservation summary JSON</a></li>
+            <li><a href="<?php echo htmlspecialchars($example_files['motif_summary']); ?>">Motif summary JSON</a></li>
+            <li><a href="<?php echo htmlspecialchars($example_files['motif_raw']); ?>">Raw motif report</a></li>
+            <li><a href="<?php echo htmlspecialchars($example_files['tree_newick']); ?>">Newick tree</a></li>
+            <li><a href="<?php echo htmlspecialchars($example_files['tree_summary']); ?>">Tree summary JSON</a></li>
+            <?php if ($tree_png_exists): ?>
+                <li><a href="<?php echo htmlspecialchars($example_files['tree_png']); ?>">Tree image PNG</a></li>
+            <?php endif; ?>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h2>Conservation summary</h2>
+        <p><strong>Sequence count:</strong> <?php echo htmlspecialchars((string)($conservation_data['sequence_count'] ?? '')); ?></p>
+        <p><strong>Alignment length:</strong> <?php echo htmlspecialchars((string)($conservation_data['alignment_length'] ?? '')); ?> aa</p>
+        <p><strong>Average pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['average_pairwise_identity'] ?? '')); ?>%</p>
+        <p><strong>Minimum pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['minimum_pairwise_identity'] ?? '')); ?>%</p>
+        <p><strong>Maximum pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['maximum_pairwise_identity'] ?? '')); ?>%</p>
+        <p><strong>Average compared non-gap sites:</strong> <?php echo htmlspecialchars((string)($conservation_data['average_compared_sites'] ?? '')); ?></p>
+    </div>
+
+    <div class="box">
+        <h2>Motif summary</h2>
+        <p><strong>Total sequences scanned:</strong> <?php echo htmlspecialchars((string)($motif_data['sequence_count'] ?? '')); ?></p>
+        <p><strong>Sequences with motif hits:</strong> <?php echo htmlspecialchars((string)($motif_data['sequences_with_hits'] ?? '')); ?></p>
+        <p><strong>Total motif hits:</strong> <?php echo htmlspecialchars((string)($motif_data['total_hits'] ?? '')); ?></p>
+
+        <?php if (empty($motif_hits)): ?>
+            <p>No motif hit positions were found in this example dataset.</p>
+        <?php else: ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sequence ID</th>
+                        <th>Motif</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Motif length</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($motif_hits as $row): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($row['sequence_id']); ?></td>
+                            <td><?php echo htmlspecialchars($row['motif']); ?></td>
+                            <td><?php echo htmlspecialchars((string)$row['start']); ?></td>
+                            <td><?php echo htmlspecialchars((string)$row['end']); ?></td>
+                            <td><?php echo htmlspecialchars((string)$row['length']); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+
+        <?php if ($motif_raw_text !== ''): ?>
+            <details>
+                <summary>Show raw motif report</summary>
+                <pre><?php echo htmlspecialchars($motif_raw_text); ?></pre>
+            </details>
+        <?php endif; ?>
+    </div>
+
+    <div class="box">
+        <h2>Phylogenetic tree summary</h2>
+        <p><strong>Total sequences in tree:</strong> <?php echo htmlspecialchars((string)($tree_data['sequence_count'] ?? '')); ?></p>
+        <p><strong>Minimum pairwise distance:</strong> <?php echo htmlspecialchars((string)($tree_data['min_distance'] ?? '')); ?></p>
+        <p><strong>Maximum pairwise distance:</strong> <?php echo htmlspecialchars((string)($tree_data['max_distance'] ?? '')); ?></p>
+        <p><strong>Average pairwise distance:</strong> <?php echo htmlspecialchars((string)($tree_data['average_distance'] ?? '')); ?></p>
+
+        <?php if ($tree_png_exists): ?>
+            <img src="<?php echo htmlspecialchars($example_files['tree_png']); ?>" alt="Example dataset phylogenetic tree">
+        <?php else: ?>
+            <p>Tree PNG image is not available.</p>
+        <?php endif; ?>
+    </div>
+
+    <p><a href="index.php">Back to home</a></p>
+    <p><a href="history.php">View history</a></p>
+</body>
+</html>
+
+
+
+===== statement_of_credits.php =====
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statement of Credits</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 40px auto;
+            line-height: 1.7;
+            padding: 0 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #1f4e79;
+        }
+        a {
+            color: #1f4e79;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        ul {
+            margin-top: 8px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        code {
+            background: #f3f3f3;
+            padding: 2px 4px;
+        }
+        .small {
+            color: #555;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Statement of Credits</h1>
+
+    <div class="box">
+        <p>
+            This page documents the external code sources, documentation sources, and AI assistance
+            used during the development of this website.
+        </p>
+        <p class="small">
+            All final code was reviewed, edited, and tested before being incorporated into the project.
+        </p>
+    </div>
+
+    <div class="box">
+        <h2>1. External code and documentation sources</h2>
+        <ul>
+            <li>
+                <strong>Biopython Bio.Entrez documentation</strong><br>
+                <a href="https://biopython.org/docs/1.80/api/Bio.Entrez.html">
+                    https://biopython.org/docs/1.80/api/Bio.Entrez.html
+                </a><br>
+                Used as the main reference for implementing sequence retrieval from NCBI in
+                <code>lib/fetch_sequences.py</code>, especially the use of Entrez search/fetch logic,
+                handle reading, and general error-handling behaviour.
+            </li>
+
+            <li>
+                <strong>NCBI Entrez Programming Utilities documentation</strong><br>
+                <a href="https://www.ncbi.nlm.nih.gov/books/NBK25499/">
+                    https://www.ncbi.nlm.nih.gov/books/NBK25499/
+                </a><br>
+                Used as background reference for how NCBI E-utilities work and for understanding the
+                search/fetch workflow behind protein sequence retrieval.
+            </li>
+
+            <li>
+                <strong>Biopython SeqIO documentation</strong><br>
+                <a href="https://biopython.org/docs/1.82/api/Bio.SeqIO.html">
+                    https://biopython.org/docs/1.82/api/Bio.SeqIO.html
+                </a><br>
+                Used as a reference for parsing FASTA records, reading downloaded protein sequences,
+                and generating short preview summaries shown in the website.
+            </li>
+
+            <li>
+                <strong>EMBOSS patmatmotifs manual</strong><br>
+                <a href="https://emboss.bioinformatics.nl/cgi-bin/emboss/help/patmatmotifs">
+                    https://emboss.bioinformatics.nl/cgi-bin/emboss/help/patmatmotifs
+                </a><br>
+                Used as the main reference for PROSITE motif scanning, command-line parameters, and
+                interpretation of motif report output in the motif analysis component.
+            </li>
+
+            <li>
+                <strong>Biopython TreeConstruction documentation</strong><br>
+                <a href="https://biopython.org/docs/1.81/api/Bio.Phylo.TreeConstruction.html">
+                    https://biopython.org/docs/1.81/api/Bio.Phylo.TreeConstruction.html
+                </a><br>
+                Used as the reference for calculating pairwise distances from a multiple sequence
+                alignment and building a neighbour-joining tree in <code>lib/tree_analysis.py</code>.
+            </li>
+
+            <li>
+                <strong>Biopython Phylo documentation</strong><br>
+                <a href="https://biopython.org/docs/1.79/api/Bio.Phylo.html">
+                    https://biopython.org/docs/1.79/api/Bio.Phylo.html
+                </a><br>
+                Used as the reference for writing Newick tree files and rendering the tree output for
+                the additional analysis page.
+            </li>
+
+            <li>
+                <strong>PHP PDO documentation</strong><br>
+                <a href="https://www.php.net/manual/en/pdo.connections.php">
+                    https://www.php.net/manual/en/pdo.connections.php
+                </a><br>
+                Used as the main reference for database connection design and SQL interaction in PHP,
+                including the use of PDO for MySQL access in <code>lib/db_connect.php</code>,
+                <code>fetch.php</code>, and <code>history.php</code>.
+            </li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h2>2. AI tools used</h2>
+        <ul>
+            <li>
+                <strong>ChatGPT (OpenAI)</strong><br>
+                <a href="https://openai.com/chatgpt/">
+                    https://openai.com/chatgpt/
+                </a><br>
+                ChatGPT was used in a detailed and iterative way during development. Its use included:
+                <ul>
+                    <li>helping break the project into smaller development steps;</li>
+                    <li>helping design the overall page structure and workflow between <code>index.php</code>, <code>fetch.php</code>, <code>analyze.php</code>, <code>motif.php</code>, <code>tree.php</code>, and <code>history.php</code>;</li>
+                    <li>suggesting draft PHP and Python code for sequence retrieval, JSON handling, motif parsing, tree generation, and history filtering;</li>
+                    <li>helping debug practical issues such as path validation, JSON parsing failures, Matplotlib environment warnings, and history page display logic;</li>
+                    <li>helping improve wording on user-facing pages, such as status messages, interpretation text, and retention notices;</li>
+                    <li>helping draft and refine this Statement of Credits page in a clearer and more specific format.</li>
+                </ul>
+                The generated suggestions were not copied blindly: they were checked, edited, tested,
+                and revised during implementation.
+            </li>
+        </ul>
+    </div>
+
+    <div class="box">
+        <h2>3. Notes on authorship</h2>
+        <p>
+            The overall website was assembled, tested, and adapted by the site author. External
+            documentation and AI assistance were used as development support, but the final selection,
+            integration, debugging, and deployment decisions were made during the implementation of this
+            website.
+        </p>
+    </div>
+
+    <p><a href="index.php">Back to home</a></p>
+</body>
+</html>
+
+
+===== lib/db_connect.php =====
+<?php
+$dsn = 'mysql:host=127.0.0.1;port=3306;dbname=s2809725_ica;charset=utf8mb4';
+$user = 's2809725';
+$pass = 'Password673!';
+
+try {
+    $pdo = new PDO($dsn, $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+?>
+
+
+
+===== lib/cleanup_results.php =====
+<?php
+// IMPORTANT:
+// This cleanup function is intentionally NON-RECURSIVE.
+//
+// It is designed to delete only ordinary time-limited files directly inside
+// the main /results directory.
+//
+// Do NOT change this function to recursive deletion unless you also add an
+// explicit exclusion for /results/examples/.
+//
+// The /results/examples/ directory stores the fixed coursework example dataset
+// (Aves glucose-6-phosphatase) and should be kept as a permanent, pre-processed
+// example for users. It must not be removed by the normal 60-day cleanup logic.
+function cleanup_old_results($results_dir, $days = 60) {
+    $deleted = 0;
+    $errors = 0;
+
+    if (!is_dir($results_dir)) {
+        return ['deleted' => 0, 'errors' => 1];
+    }
+
+    $cutoff = time() - ($days * 24 * 60 * 60);
+
+    $files = glob($results_dir . '/*');
+    if ($files === false) {
+        return ['deleted' => 0, 'errors' => 1];
+    }
+
+    foreach ($files as $file) {
+        if (!is_file($file)) {
+            continue;
+        }
+
+        $mtime = filemtime($file);
+        if ($mtime === false) {
+            $errors++;
+            continue;
+        }
+
+        if ($mtime < $cutoff) {
+            if (@unlink($file)) {
+                $deleted++;
+            } else {
+                $errors++;
+            }
+        }
+    }
+
+    return ['deleted' => $deleted, 'errors' => $errors];
+}
+?>
+
+
+===== lib/fetch_sequences.py =====
+#!/usr/bin/env python3
+import sys
+import json
+import os
+import re
+import time
+from io import StringIO
+from datetime import datetime
+from urllib.error import HTTPError, URLError
+from Bio import Entrez, SeqIO
+
+def safe_name(text):
+    text = re.sub(r'[^A-Za-z0-9._-]+', '_', text.strip())
+    return text.strip('_') or 'query'
+
+def esearch_with_retry(term, retries=5, delay=5):
+    last_error = None
+    for attempt in range(1, retries + 1):
+        try:
+            handle = Entrez.esearch(db="protein", term=term, retmax=50)
+            record = Entrez.read(handle)
+            handle.close()
+            return record
+        except Exception as e:
+            last_error = e
+            if attempt < retries:
+                time.sleep(delay)
+    raise last_error
+
+def efetch_with_retry(id_list, retries=5, delay=5):
+    last_error = None
+    joined_ids = ",".join(id_list)
+    for attempt in range(1, retries + 1):
+        try:
+            handle = Entrez.efetch(
+                db="protein",
+                id=joined_ids,
+                rettype="fasta",
+                retmode="text"
+            )
+            fasta_text = handle.read()
+            handle.close()
+            return fasta_text
+        except Exception as e:
+            last_error = e
+            if attempt < retries:
+                time.sleep(delay)
+    raise last_error
+
+def main():
+    if len(sys.argv) != 3:
+        print(json.dumps({
+            "status": "error",
+            "message": "Usage: fetch_sequences.py <family> <taxon>"
+        }))
+        return
+
+    family = sys.argv[1].strip()
+    taxon = sys.argv[2].strip()
+
+    Entrez.email = "z.zhou-131@sms.ed.ac.uk"
+    Entrez.api_key = "1298381c627756624579d8ed0f032bf30e08"
+    Entrez.max_tries = 5
+    Entrez.sleep_between_tries = 5
+
+    term = f"{family} AND {taxon}[Organism]"
+
+    try:
+        record = esearch_with_retry(term, retries=5, delay=5)
+    except Exception as e:
+        print(json.dumps({
+            "status": "error",
+            "message": f"NCBI esearch failed for term '{term}': {type(e).__name__}: {str(e)}"
+        }))
+        return
+
+    ids = record.get("IdList", [])
+
+    if not ids:
+        print(json.dumps({
+            "status": "empty",
+            "term": term,
+            "message": "No matching protein sequences found."
+        }))
+        return
+
+    try:
+        fasta_text = efetch_with_retry(ids, retries=5, delay=5)
+    except Exception as e:
+        print(json.dumps({
+            "status": "error",
+            "message": f"NCBI efetch failed for term '{term}': {type(e).__name__}: {str(e)}"
+        }))
+        return
+
+    records = list(SeqIO.parse(StringIO(fasta_text), "fasta"))
+
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    results_dir = os.path.join(project_root, "results")
+    os.makedirs(results_dir, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{safe_name(family)}_{safe_name(taxon)}_{timestamp}.fasta"
+    filepath = os.path.join(results_dir, filename)
+
+    with open(filepath, "w") as out:
+        out.write(fasta_text)
+
+    preview = []
+    for rec in records[:5]:
+        preview.append({
+            "id": rec.id,
+            "description": rec.description,
+            "length": len(rec.seq)
+        })
+
+    print(json.dumps({
+        "status": "ok",
+        "term": term,
+        "sequence_count": len(records),
+        "result_file": f"results/{filename}",
+        "preview": preview
+    }))
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(json.dumps({
+            "status": "error",
+            "message": f"Unexpected failure: {type(e).__name__}: {str(e)}"
+        }))
+
+
+===== lib/conservation_analysis.py =====
+#!/usr/bin/env python3
+import sys
+import os
+import json
+from Bio import AlignIO
+
+def pairwise_identity(seq1, seq2):
+    matches = 0
+    compared = 0
+
+    for a, b in zip(str(seq1), str(seq2)):
+        if a == '-' or b == '-':
+            continue
+        compared += 1
+        if a == b:
+            matches += 1
+
+    if compared == 0:
+        return 0.0, 0
+
+    return round(matches / compared * 100, 2), compared
+
+def main():
+    if len(sys.argv) != 2:
+        print(json.dumps({
+            "status": "error",
+            "message": "Usage: conservation_analysis.py <aligned_fasta>"
+        }))
+        return
+
+    aligned_file = sys.argv[1]
+
+    if not os.path.exists(aligned_file):
+        print(json.dumps({
+            "status": "error",
+            "message": f"Aligned file not found: {aligned_file}"
+        }))
+        return
+
+    alignment = AlignIO.read(aligned_file, "fasta")
+    seq_count = len(alignment)
+    align_length = alignment.get_alignment_length()
+
+    base = os.path.splitext(os.path.basename(aligned_file))[0]
+    results_dir = os.path.dirname(aligned_file)
+
+    matrix_file = os.path.join(results_dir, f"{base}_identity_matrix.tsv")
+    summary_file = os.path.join(results_dir, f"{base}_conservation_summary.json")
+
+    ids = [record.id for record in alignment]
+
+    # pairwise identity matrix
+    with open(matrix_file, "w") as out:
+        out.write("Sequence_ID\t" + "\t".join(ids) + "\n")
+        for i, rec1 in enumerate(alignment):
+            row = [rec1.id]
+            for j, rec2 in enumerate(alignment):
+                if i == j:
+                    row.append("100.00")
+                else:
+                    identity, compared = pairwise_identity(rec1.seq, rec2.seq)
+                    row.append(f"{identity:.2f}")
+            out.write("\t".join(row) + "\n")
+
+    # summary: mean pairwise identity
+    values = []
+    compared_sites = []
+    for i in range(seq_count):
+        for j in range(i + 1, seq_count):
+            identity, compared = pairwise_identity(alignment[i].seq, alignment[j].seq)
+            values.append(identity)
+            compared_sites.append(compared)
+
+    avg_identity = round(sum(values) / len(values), 2) if values else 0.0
+    min_identity = round(min(values), 2) if values else 0.0
+    max_identity = round(max(values), 2) if values else 0.0
+    avg_compared_sites = round(sum(compared_sites) / len(compared_sites), 2) if compared_sites else 0.0
+
+    summary = {
+        "status": "ok",
+        "aligned_file": aligned_file,
+        "sequence_count": seq_count,
+        "alignment_length": align_length,
+        "average_pairwise_identity": avg_identity,
+        "minimum_pairwise_identity": min_identity,
+        "maximum_pairwise_identity": max_identity,
+        "average_compared_sites": avg_compared_sites,
+        "identity_matrix_file": matrix_file,
+        "summary_file": summary_file
+    }
+
+    with open(summary_file, "w") as out:
+        json.dump(summary, out, indent=2)
+
+    print(json.dumps(summary, indent=2))
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(json.dumps({
+            "status": "error",
+            "message": str(e)
+        }))
+
+
+===== lib/motif_scan.py =====
+#!/usr/bin/env python3
+import sys
+import os
+import json
+import re
+import tempfile
+import subprocess
+from Bio import SeqIO
+
+PATMAT = "/usr/bin/patmatmotifs"
+
+def parse_patmatmotifs_report(report_text):
+    """
+    Parser for EMBOSS patmatmotifs text output.
+    Returns:
+      {
+        "sequence_id": "...",
+        "hit_count": int or None,
+        "hits": [
+          {
+            "motif": "...",
+            "start": "...",
+            "end": "...",
+            "length": "...",
+            "raw": "..."
+          },
+          ...
+        ]
+      }
+    """
+    result = {
+        "sequence_id": None,
+        "hit_count": None,
+        "hits": []
+    }
+
+    seq_match = re.search(r"# Sequence:\s+(\S+)", report_text)
+    if seq_match:
+        result["sequence_id"] = seq_match.group(1)
+
+    hit_match = re.search(r"# HitCount:\s*(\d+)", report_text)
+    if hit_match:
+        result["hit_count"] = int(hit_match.group(1))
+
+    lines = report_text.splitlines()
+
+    current_hit = None
+
+    for line in lines:
+        stripped = line.strip()
+
+        if stripped.startswith("Length ="):
+            # If an unfinished hit somehow already exists, save it first
+            if current_hit is not None:
+                current_hit["raw"] = current_hit["raw"].strip()
+                result["hits"].append(current_hit)
+
+            length_match = re.search(r"Length\s*=\s*(\d+)", stripped)
+            current_hit = {
+                "motif": "",
+                "start": "",
+                "end": "",
+                "length": length_match.group(1) if length_match else "",
+                "raw": line + "\n"
+            }
+            continue
+
+        if current_hit is not None:
+            current_hit["raw"] += line + "\n"
+
+            start_match = re.search(r"Start\s*=\s*position\s*(\d+)\s*of sequence", stripped, re.IGNORECASE)
+            if start_match:
+                current_hit["start"] = start_match.group(1)
+                continue
+
+            end_match = re.search(r"End\s*=\s*position\s*(\d+)\s*of sequence", stripped, re.IGNORECASE)
+            if end_match:
+                current_hit["end"] = end_match.group(1)
+                continue
+
+            motif_match = re.search(r"Motif\s*=\s*(.+)", stripped)
+            if motif_match:
+                current_hit["motif"] = motif_match.group(1).strip()
+                current_hit["raw"] = current_hit["raw"].strip()
+                result["hits"].append(current_hit)
+                current_hit = None
+                continue
+
+    # safety fallback
+    if current_hit is not None:
+        current_hit["raw"] = current_hit["raw"].strip()
+        result["hits"].append(current_hit)
+
+    return result
+
+def run_patmat_on_one_record(record):
+    with tempfile.TemporaryDirectory() as tmpdir:
+        fasta_path = os.path.join(tmpdir, "one.fasta")
+        out_path = os.path.join(tmpdir, "one.patmatmotifs")
+
+        with open(fasta_path, "w") as handle:
+            SeqIO.write(record, handle, "fasta")
+
+        cmd = [
+            PATMAT,
+            "-sequence", fasta_path,
+            "-outfile", out_path,
+            "-full", "Y",
+            "-auto"
+        ]
+
+        proc = subprocess.run(cmd, capture_output=True, text=True)
+
+        if not os.path.exists(out_path):
+            return {
+                "status": "error",
+                "sequence_id": record.id,
+                "message": proc.stderr.strip() or proc.stdout.strip() or "patmatmotifs did not create output file."
+            }
+
+        with open(out_path, "r") as handle:
+            report_text = handle.read()
+
+        parsed = parse_patmatmotifs_report(report_text)
+        if not parsed["sequence_id"]:
+            parsed["sequence_id"] = record.id
+
+        return {
+            "status": "ok",
+            "sequence_id": parsed["sequence_id"],
+            "length": len(record.seq),
+            "hit_count": parsed["hit_count"] if parsed["hit_count"] is not None else 0,
+            "hits": parsed["hits"],
+            "raw_report": report_text
+        }
+
+def main():
+    if len(sys.argv) != 2:
+        print(json.dumps({
+            "status": "error",
+            "message": "Usage: motif_scan.py <input_fasta>"
+        }))
+        return
+
+    input_fasta = sys.argv[1]
+
+    if not os.path.exists(input_fasta):
+        print(json.dumps({
+            "status": "error",
+            "message": f"Input FASTA not found: {input_fasta}"
+        }))
+        return
+
+    records = list(SeqIO.parse(input_fasta, "fasta"))
+    if not records:
+        print(json.dumps({
+            "status": "error",
+            "message": "No sequences found in input FASTA."
+        }))
+        return
+
+    all_results = []
+    total_hits = 0
+    sequences_with_hits = 0
+    raw_reports = []
+
+    for record in records:
+        one_result = run_patmat_on_one_record(record)
+        all_results.append(one_result)
+
+        if one_result["status"] == "ok":
+            hc = one_result.get("hit_count", 0) or 0
+            total_hits += hc
+            if hc > 0:
+                sequences_with_hits += 1
+            raw_reports.append(
+                "########################################\n"
+                f"# Sequence: {one_result['sequence_id']}\n"
+                f"# HitCount: {hc}\n"
+                "########################################\n\n"
+                + one_result.get("raw_report", "")
+            )
+
+    print(json.dumps({
+        "status": "ok",
+        "sequence_count": len(records),
+        "sequences_with_hits": sequences_with_hits,
+        "total_hits": total_hits,
+        "results": all_results,
+        "combined_raw_report": "\n\n".join(raw_reports)
+    }))
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(json.dumps({
+            "status": "error",
+            "message": str(e)
+        }))
+
+
+
+===== lib/tree_analysis.py =====
+#!/usr/bin/env python3
+import sys
+import os
+import json
+
+from Bio import AlignIO, Phylo
+from Bio.Phylo.TreeConstruction import DistanceCalculator, DistanceTreeConstructor
+
+def summarize_distances(distance_matrix):
+    values = []
+    for i, row in enumerate(distance_matrix.matrix):
+        for j in range(i):
+            values.append(float(row[j]))
+
+    if not values:
+        return {
+            "min_distance": 0.0,
+            "max_distance": 0.0,
+            "average_distance": 0.0
+        }
+
+    return {
+        "min_distance": round(min(values), 4),
+        "max_distance": round(max(values), 4),
+        "average_distance": round(sum(values) / len(values), 4)
+    }
+
+def main():
+    if len(sys.argv) != 2:
+        print(json.dumps({
+            "status": "error",
+            "message": "Usage: tree_analysis.py <aligned_fasta>"
+        }))
+        return
+
+    aligned_file = sys.argv[1]
+
+    if not os.path.exists(aligned_file):
+        print(json.dumps({
+            "status": "error",
+            "message": f"Aligned FASTA not found: {aligned_file}"
+        }))
+        return
+
+    alignment = AlignIO.read(aligned_file, "fasta")
+    seq_count = len(alignment)
+
+    if seq_count < 2:
+        print(json.dumps({
+            "status": "error",
+            "message": "At least two sequences are required to build a tree."
+        }))
+        return
+
+    results_dir = os.path.dirname(aligned_file)
+    base = os.path.splitext(os.path.basename(aligned_file))[0]
+
+    tree_file = os.path.join(results_dir, f"{base}_nj_tree.nwk")
+    png_file = os.path.join(results_dir, f"{base}_nj_tree.png")
+    summary_file = os.path.join(results_dir, f"{base}_tree_summary.json")
+
+    calculator = DistanceCalculator("identity")
+    distance_matrix = calculator.get_distance(alignment)
+
+    constructor = DistanceTreeConstructor()
+    tree = constructor.nj(distance_matrix)
+
+    Phylo.write(tree, tree_file, "newick")
+
+    png_created = False
+    png_error = ""
+
+    try:
+        mpl_config_dir = os.path.join(results_dir, ".mplconfig")
+        os.makedirs(mpl_config_dir, exist_ok=True)
+        os.environ["MPLCONFIGDIR"] = mpl_config_dir
+
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+
+        fig_height = max(6, seq_count * 0.28)
+        fig = plt.figure(figsize=(14, fig_height))
+        ax = fig.add_subplot(1, 1, 1)
+        Phylo.draw(tree, axes=ax, do_show=False)
+        plt.tight_layout()
+        fig.savefig(png_file, dpi=200, bbox_inches="tight")
+        plt.close(fig)
+        png_created = True
+    except Exception as e:
+        png_error = str(e)
+
+    dist_summary = summarize_distances(distance_matrix)
+
+    summary = {
+        "status": "ok",
+        "aligned_file": aligned_file,
+        "sequence_count": seq_count,
+        "tree_file": tree_file,
+        "png_file": png_file if png_created else "",
+        "png_created": png_created,
+        "png_error": png_error,
+        "summary_file": summary_file,
+        "min_distance": dist_summary["min_distance"],
+        "max_distance": dist_summary["max_distance"],
+        "average_distance": dist_summary["average_distance"]
+    }
+
+    with open(summary_file, "w") as out:
+        json.dump(summary, out, indent=2)
+
+    print(json.dumps(summary, indent=2))
+
+if __name__ == "__main__":
+    try:
+        main()
+    except Exception as e:
+        print(json.dumps({
+            "status": "error",
+            "message": str(e)
+        }))
+
+
+
+===== data/schema.sql =====
+CREATE DATABASE IF NOT EXISTS s2809725_ica;
+USE s2809725_ica;
+
+CREATE TABLE IF NOT EXISTS history (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user VARCHAR(50),
+    family VARCHAR(100),
+    taxon VARCHAR(100),
+    result_link VARCHAR(255),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+===== README.md =====
+
+
+
+===== db_test.php =====
+<?php
+require_once __DIR__ . '/lib/db_connect.php';
+echo "PDO connection successful.";
+?>
+
+
+
+===== fetch.php.bak =====
+<?php
+$family = $_POST['family'] ?? '';
+$taxon  = $_POST['taxon'] ?? '';
+
+$family = trim($family);
+$taxon  = trim($taxon);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Sequences</title>
+</head>
+<body>
+    <h1>Fetch Sequences</h1>
+
+    <?php if ($family === '' || $taxon === ''): ?>
+        <p>Error: missing protein family or taxonomic group.</p>
+    <?php else: ?>
+        <p><strong>Protein family:</strong> <?php echo htmlspecialchars($family); ?></p>
+        <p><strong>Taxonomic group:</strong> <?php echo htmlspecialchars($taxon); ?></p>
+        <p>The next step will be to query NCBI using Bio.Entrez and download FASTA sequences.</p>
+    <?php endif; ?>
+
+    <p><a href="index.php">Back to home</a></p>
+</body>
+</html>
+
+
+===== motif.php.bak =====
+<?php
+$input_file = $_GET['file'] ?? '';
+$input_file = trim($input_file);
+
+$results_dir = realpath(__DIR__ . '/results');
+
+function error_page($message) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Motif Scan</title>
+    </head>
+    <body>
+        <h1>Motif Scan</h1>
+        <p><strong>Error:</strong> <?php echo htmlspecialchars($message); ?></p>
+        <p><a href="index.php">Back to home</a></p>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
+if ($input_file === '') {
+    error_page('No input FASTA file was provided.');
+}
+
+$relative_input = ltrim($input_file, '/');
+$absolute_input = realpath(__DIR__ . '/' . $relative_input);
+
+if ($absolute_input === false || strpos($absolute_input, $results_dir) !== 0) {
+    error_page('Invalid input file path.');
+}
+
+if (!file_exists($absolute_input)) {
+    error_page('Input FASTA file does not exist.');
+}
+
+$input_basename = pathinfo($absolute_input, PATHINFO_FILENAME);
+$motif_basename = $input_basename . '.patmatmotifs';
+$motif_absolute = $results_dir . '/' . $motif_basename;
+$motif_relative = 'results/' . $motif_basename;
+
+$patmat = '/usr/bin/patmatmotifs';
+
+$run_output = '';
+
+if (!file_exists($motif_absolute)) {
+    $command = $patmat
+        . ' -sequence ' . escapeshellarg($absolute_input)
+        . ' -outfile ' . escapeshellarg($motif_absolute)
+        . ' -full Y -auto 2>&1';
+
+    $run_output = shell_exec($command);
+
+    if (!file_exists($motif_absolute)) {
+        error_page("patmatmotifs failed.<br><pre>" . htmlspecialchars($run_output) . "</pre>");
+    }
+}
+
+$report_text = file_get_contents($motif_absolute);
+if ($report_text === false) {
+    error_page('Could not read motif report file.');
+}
+
+$hitcount = null;
+if (preg_match('/# HitCount:\s*([0-9]+)/', $report_text, $matches)) {
+    $hitcount = (int)$matches[1];
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motif Scan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 950px;
+            margin: 40px auto;
+            line-height: 1.6;
+            padding: 0 20px;
+        }
+        .box {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #1f4e79;
+        }
+        a {
+            color: #1f4e79;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            background: #f3f3f3;
+            padding: 12px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        .note {
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Motif / Domain Scan</h1>
+
+    <div class="box">
+        <h2>Input and output files</h2>
+        <p><strong>Input FASTA:</strong> <a href="<?php echo htmlspecialchars($relative_input); ?>"><?php echo htmlspecialchars($relative_input); ?></a></p>
+        <p><strong>Motif report:</strong> <a href="<?php echo htmlspecialchars($motif_relative); ?>"><?php echo htmlspecialchars($motif_relative); ?></a></p>
+        <p class="note">
+            Result files are retained on the server for 60 days.
+            You can revisit recent analyses from the history page during this period.
+        </p>
+    </div>
+
+    <div class="box">
+        <h2>Scan summary</h2>
+        <?php if ($hitcount === null): ?>
+            <p>HitCount could not be parsed from the report.</p>
+        <?php else: ?>
+            <p><strong>HitCount:</strong> <?php echo htmlspecialchars((string)$hitcount); ?></p>
+            <?php if ($hitcount === 0): ?>
+                <p>No PROSITE motif was reported in this scan.</p>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+
+    <div class="box">
+        <h2>Raw patmatmotifs report</h2>
+        <pre><?php echo htmlspecialchars($report_text); ?></pre>
+    </div>
+
+    <p><a href="index.php">Back to home</a></p>
+    <p><a href="history.php">View history</a></p>
+</body>
+</html>
+
+

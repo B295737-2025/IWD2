@@ -1,0 +1,13 @@
+{
+  "status": "ok",
+  "aligned_file": "results/aligned_glucose-6-phosphatase_Aves_20260401_183947.fasta",
+  "sequence_count": 50,
+  "tree_file": "results/aligned_glucose-6-phosphatase_Aves_20260401_183947_nj_tree.nwk",
+  "png_file": "results/aligned_glucose-6-phosphatase_Aves_20260401_183947_nj_tree.png",
+  "png_created": true,
+  "png_error": "",
+  "summary_file": "results/aligned_glucose-6-phosphatase_Aves_20260401_183947_tree_summary.json",
+  "min_distance": 0.0,
+  "max_distance": 0.6917,
+  "average_distance": 0.3545
+}
