@@ -158,6 +158,11 @@ $aligned_exists = file_exists(__DIR__ . '/' . $aligned_relative);
 $summary_relative = $data['summary_file'] ?? '';
 $raw_report_relative = $data['raw_file'] ?? '';
 
+$motif_stats_relative = $data['motif_stats_file'] ?? '';
+$motif_stats_plot_relative = $data['motif_stats_plot_file'] ?? '';
+$motif_stats_plot_created = $data['motif_stats_plot_created'] ?? false;
+$motif_stats_plot_error = $data['motif_stats_plot_error'] ?? '';
+
 $sequence_count = $data['sequence_count'] ?? 0;
 $sequences_with_hits = $data['sequences_with_hits'] ?? 0;
 $total_hits = $data['total_hits'] ?? 0;
@@ -217,6 +222,21 @@ require_once __DIR__ . '/lib/site_header.php';
         <p><strong>Combined raw motif report:</strong>
             <a href="<?php echo htmlspecialchars($raw_report_relative); ?>">
                 <?php echo htmlspecialchars($raw_report_relative); ?>
+            </a>
+        </p>
+    <?php endif; ?>
+        <?php if ($motif_stats_relative !== ''): ?>
+        <p><strong>Motif statistics JSON:</strong>
+            <a href="<?php echo htmlspecialchars($motif_stats_relative); ?>">
+                <?php echo htmlspecialchars($motif_stats_relative); ?>
+            </a>
+        </p>
+    <?php endif; ?>
+
+    <?php if ($motif_stats_plot_relative !== '' && $motif_stats_plot_created): ?>
+        <p><strong>Motif statistics plot:</strong>
+            <a href="<?php echo htmlspecialchars($motif_stats_plot_relative); ?>">
+                <?php echo htmlspecialchars($motif_stats_plot_relative); ?>
             </a>
         </p>
     <?php endif; ?>
@@ -295,6 +315,31 @@ require_once __DIR__ . '/lib/site_header.php';
                 <?php endforeach; ?>
             </tbody>
         </table>
+    <?php endif; ?>
+</div>
+
+<div class="box">
+    <h2>Motif hits frequency</h2>
+
+    <?php if ($motif_stats_plot_relative !== '' && $motif_stats_plot_created && file_exists(__DIR__ . '/' . $motif_stats_plot_relative)): ?>
+        <p>
+            This bar chart summarises how often each detected PROSITE motif appears
+            across the scanned sequence set.
+        </p>
+        <img src="<?php echo htmlspecialchars($motif_stats_plot_relative); ?>" alt="Motif hits frequency plot">
+    <?php else: ?>
+        <p class="warn">Motif statistics plot is not available.</p>
+        <?php if ($motif_stats_plot_error !== ''): ?>
+            <pre><?php echo htmlspecialchars($motif_stats_plot_error); ?></pre>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <?php if ($motif_stats_relative !== ''): ?>
+        <p>
+            <a href="<?php echo htmlspecialchars($motif_stats_relative); ?>">
+                Download motif counts (JSON)
+            </a>
+        </p>
     <?php endif; ?>
 </div>
 
