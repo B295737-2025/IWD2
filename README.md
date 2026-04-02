@@ -1,17 +1,20 @@
 # Protein Sequence Analysis Website
 
-This project is a bioinformatics web application developed for the IWD2 website design coursework. It allows a user to retrieve protein sequences from NCBI for a chosen protein family and taxonomic group, and then explore sequence conservation, PROSITE motif matches, and phylogenetic relationships through a web interface.
+This project is a bioinformatics web application developed for the IWD2 website design assignment. It allows a user to retrieve protein sequences from NCBI for a chosen protein family and taxonomic group, and then explore sequence conservation, PROSITE motif matches, and phylogenetic relationships through a web interface.
 
 ## Main features
 
 - Retrieve protein sequences from NCBI using a protein family and taxonomic group
-- Save raw FASTA files in the server-side results directory
+- Save raw FASTA files in the server-side `results/` directory
 - Run conservation analysis using multiple sequence alignment and pairwise identity summary
+- Generate a conservation profile TSV file and conservation profile plot from the aligned FASTA
 - Run PROSITE motif scanning using EMBOSS `patmatmotifs`
-- Run phylogenetic tree analysis using a neighbour-joining tree built from the aligned FASTA file
+- Generate motif frequency statistics as JSON and a motif frequency plot
+- Run phylogenetic tree analysis using a neighbour-joining tree built from the aligned FASTA
 - Provide a fixed pre-computed example dataset for **glucose-6-phosphatase proteins from Aves**
 - Store query history in MySQL and allow users to revisit previous results
 - Provide a Help page for biological users
+- Provide an About page for a developer-oriented overview
 - Provide a Statement of Credits page documenting external sources and AI use
 
 ## Website entry points
@@ -24,6 +27,7 @@ This project is a bioinformatics web application developed for the IWD2 website 
 - `history.php` - history and filtering page
 - `example.php` - fixed example dataset page
 - `help.php` - help and biological context page
+- `about.php` - developer-oriented overview page
 - `statement_of_credits.php` - credits and AI usage page
 
 ## Project structure
@@ -36,8 +40,10 @@ This project is a bioinformatics web application developed for the IWD2 website 
 - `history.php` - query history
 - `example.php` - example dataset page
 - `help.php` - help page
+- `about.php` - developer-oriented overview page
 - `statement_of_credits.php` - credits page
 - `lib/` - PHP and Python helper scripts
+- `lib/motif_stats.py` - motif frequency statistics and plot generation
 - `css/style.css` - global stylesheet
 - `data/schema.sql` - database schema
 - `results/` - generated analysis outputs
@@ -87,6 +93,14 @@ This example dataset is displayed through:
 
 - `example.php`
 
+The example dataset includes fixed output files for:
+
+- conservation summary
+- conservation profile TSV and PNG
+- motif summary
+- motif statistics JSON and PNG
+- phylogenetic tree summary, Newick file, and tree PNG
+
 Unlike normal results, the example dataset is not regenerated dynamically.
 
 ## Result retention
@@ -119,12 +133,19 @@ return [
 
 This file should not be uploaded as part of the public website code.
 
+## Repository
+
+Project repository:
+
+https://github.com/B295737-2025/IWD2
+
 ## Notes on implementation
 
 - SQL interactions are handled through PHP PDO, not Python MySQL modules
 - Sequence retrieval is performed with Biopython Bio.Entrez
-- Conservation analysis is based on aligned FASTA files and pairwise identity summary
+- Conservation analysis is based on aligned FASTA files and pairwise identity summary, and a conservation profile plot
 - Motif scanning is performed sequence-by-sequence using EMBOSS `patmatmotifs`
+- Motif results are additionally summarised into motif frequency statistics and a bar plot
 - The extra biological analysis implemented in this project is phylogenetic tree construction
 - The fixed example dataset is stored in `results/examples/` and is handled separately from normal user-generated results
 

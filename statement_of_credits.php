@@ -7,84 +7,107 @@ require_once __DIR__ . '/lib/site_header.php';
 <div class="hero">
     <h1>Statement of Credits</h1>
     <p>
-        This page documents the external code sources, documentation sources,
-        and AI assistance used during the development of this website.
+        This page documents the external sources, documentation, software tools,
+        and AI assistance used during the design, implementation, debugging,
+        and refinement of this website.
     </p>
 </div>
 
 <div class="box">
     <p class="small">
-        All final code was reviewed, edited, and tested before being incorporated
-        into the project.
+        All final code and wording included in the website were reviewed, edited,
+        tested, and integrated before submission.
     </p>
 </div>
 
 <div class="box">
-    <h2>1. External code and documentation sources</h2>
+    <h2>1. External documentation and software references</h2>
     <ul>
         <li>
             <strong>Biopython Bio.Entrez documentation</strong><br>
-            <a href="https://biopython.org/docs/1.80/api/Bio.Entrez.html">
+            <a href="https://biopython.org/docs/1.80/api/Bio.Entrez.html" target="_blank" rel="noopener noreferrer">
                 https://biopython.org/docs/1.80/api/Bio.Entrez.html
             </a><br>
-            Used as the main reference for implementing sequence retrieval from NCBI in
-            <code>lib/fetch_sequences.py</code>, especially the use of Entrez search/fetch logic,
-            handle reading, and general error-handling behaviour.
+            Used as the main reference for implementing protein sequence retrieval
+            from NCBI in <code>lib/fetch_sequences.py</code>, especially Entrez
+            search/fetch usage, return handling, and retry logic.
         </li>
 
         <li>
             <strong>NCBI Entrez Programming Utilities documentation</strong><br>
-            <a href="https://www.ncbi.nlm.nih.gov/books/NBK25499/">
+            <a href="https://www.ncbi.nlm.nih.gov/books/NBK25499/" target="_blank" rel="noopener noreferrer">
                 https://www.ncbi.nlm.nih.gov/books/NBK25499/
             </a><br>
-            Used as background reference for how NCBI E-utilities work and for understanding the
-            search/fetch workflow behind protein sequence retrieval.
+            Used as background reference for how NCBI E-utilities work and how
+            query terms and sequence retrieval should be structured.
         </li>
 
         <li>
             <strong>Biopython SeqIO documentation</strong><br>
-            <a href="https://biopython.org/docs/1.82/api/Bio.SeqIO.html">
+            <a href="https://biopython.org/docs/1.82/api/Bio.SeqIO.html" target="_blank" rel="noopener noreferrer">
                 https://biopython.org/docs/1.82/api/Bio.SeqIO.html
             </a><br>
-            Used as a reference for parsing FASTA records, reading downloaded protein sequences,
-            and generating short preview summaries shown in the website.
+            Used as a reference for parsing FASTA records, extracting sequence
+            identifiers, generating preview information, and reading sequence files.
+        </li>
+
+        <li>
+            <strong>Clustal Omega</strong><br>
+            Used as the alignment tool for conservation analysis through the server-side
+            <code>clustalo</code> executable, called from the PHP/Python workflow.
         </li>
 
         <li>
             <strong>EMBOSS patmatmotifs manual</strong><br>
-            <a href="https://emboss.bioinformatics.nl/cgi-bin/emboss/help/patmatmotifs">
+            <a href="https://emboss.bioinformatics.nl/cgi-bin/emboss/help/patmatmotifs" target="_blank" rel="noopener noreferrer">
                 https://emboss.bioinformatics.nl/cgi-bin/emboss/help/patmatmotifs
             </a><br>
-            Used as the main reference for PROSITE motif scanning, command-line parameters, and
-            interpretation of motif report output in the motif analysis component.
+            Used as the main reference for PROSITE motif scanning, command-line options,
+            and interpretation of the motif report output used in
+            <code>lib/motif_scan.py</code>.
         </li>
 
         <li>
             <strong>Biopython TreeConstruction documentation</strong><br>
-            <a href="https://biopython.org/docs/1.81/api/Bio.Phylo.TreeConstruction.html">
+            <a href="https://biopython.org/docs/1.81/api/Bio.Phylo.TreeConstruction.html" target="_blank" rel="noopener noreferrer">
                 https://biopython.org/docs/1.81/api/Bio.Phylo.TreeConstruction.html
             </a><br>
-            Used as the reference for calculating pairwise distances from a multiple sequence
-            alignment and building a neighbour-joining tree in <code>lib/tree_analysis.py</code>.
+            Used as the reference for distance calculation from aligned FASTA files
+            and neighbour-joining tree construction in <code>lib/tree_analysis.py</code>.
         </li>
 
         <li>
             <strong>Biopython Phylo documentation</strong><br>
-            <a href="https://biopython.org/docs/1.79/api/Bio.Phylo.html">
+            <a href="https://biopython.org/docs/1.79/api/Bio.Phylo.html" target="_blank" rel="noopener noreferrer">
                 https://biopython.org/docs/1.79/api/Bio.Phylo.html
             </a><br>
-            Used as the reference for writing Newick tree files and rendering the tree output for
-            the additional analysis page.
+            Used for writing Newick tree files and rendering tree graphics for
+            the phylogenetic analysis page.
         </li>
 
         <li>
             <strong>PHP PDO documentation</strong><br>
-            <a href="https://www.php.net/manual/en/pdo.connections.php">
+            <a href="https://www.php.net/manual/en/pdo.connections.php" target="_blank" rel="noopener noreferrer">
                 https://www.php.net/manual/en/pdo.connections.php
             </a><br>
-            Used as the main reference for database connection design and SQL interaction in PHP,
-            including the use of PDO for MySQL access in <code>lib/db_connect.php</code>,
-            <code>fetch.php</code>, and <code>history.php</code>.
+            Used as the main reference for database connection handling and SQL
+            interaction through PDO in <code>lib/db_connect.php</code>,
+            <code>fetch_run.php</code>, and <code>history.php</code>.
+        </li>
+
+        <li>
+            <strong>Matplotlib documentation</strong><br>
+            <a href="https://matplotlib.org/stable/" target="_blank" rel="noopener noreferrer">
+                https://matplotlib.org/stable/
+            </a><br>
+            Used as the plotting reference for the conservation profile image,
+            motif frequency chart, and phylogenetic tree PNG output.
+        </li>
+
+        <li>
+            <strong>Git and GitHub</strong><br>
+            Used for version control and source code backup during development and
+            final refinement of the project.
         </li>
     </ul>
 </div>
@@ -94,31 +117,44 @@ require_once __DIR__ . '/lib/site_header.php';
     <ul>
         <li>
             <strong>ChatGPT (OpenAI)</strong><br>
-            <a href="https://openai.com/chatgpt/">
+            <a href="https://openai.com/chatgpt/" target="_blank" rel="noopener noreferrer">
                 https://openai.com/chatgpt/
             </a><br>
-            ChatGPT was used in a detailed and iterative way during development. Its use included:
+            ChatGPT was used as a development support tool throughout the project.
+            Its use included:
             <ul>
-                <li>helping break the project into smaller development steps;</li>
-                <li>helping design the overall page structure and workflow between <code>index.php</code>, <code>fetch.php</code>, <code>analyze.php</code>, <code>motif.php</code>, <code>tree.php</code>, and <code>history.php</code>;</li>
-                <li>suggesting draft PHP and Python code for sequence retrieval, JSON handling, motif parsing, tree generation, and history filtering;</li>
-                <li>helping debug practical issues such as path validation, JSON parsing failures, Matplotlib environment warnings, and history page display logic;</li>
-                <li>helping improve wording on user-facing pages, such as status messages, interpretation text, and retention notices;</li>
-                <li>helping draft and refine this Statement of Credits page in a clearer and more specific format.</li>
+                <li>breaking the project into smaller implementation steps and helping plan the workflow;</li>
+                <li>helping debug practical problems such as path validation, cached result logic, JSON parsing failures, page linking issues, and example-dataset path handling;</li>
+                <li>helping refine user-facing wording on the homepage, help page, result pages, status pages, and credits page;</li>
+                <li>helping design and integrate later improvements such as the conservation profile plot, motif frequency plot, About page, GitHub link integration, and final QA checklist;</li>
+                <li>helping review project structure and identify inconsistencies between displayed behaviour and backend logic.</li>
             </ul>
-            The generated suggestions were not copied blindly: they were checked, edited, tested,
-            and revised during implementation.
+            AI-generated suggestions were not copied blindly. They were checked,
+            edited, tested on the server, and revised before being kept in the final site.
         </li>
     </ul>
 </div>
 
 <div class="box">
-    <h2>3. Notes on authorship</h2>
+    <h2>3. Project repository</h2>
     <p>
-        The overall website was assembled, tested, and adapted by the site author.
+        The source code repository for this project is available at:
+    </p>
+    <p>
+        <a href="https://github.com/B295737-2025/IWD2" target="_blank" rel="noopener noreferrer">
+            https://github.com/B295737-2025/IWD2
+        </a>
+    </p>
+</div>
+
+<div class="box">
+    <h2>4. Notes on authorship</h2>
+    <p>
+        The overall website was assembled, adapted, tested, and deployed by the site author.
         External documentation and AI assistance were used as development support,
-        but the final selection, integration, debugging, and deployment decisions
-        were made during the implementation of this website.
+        but the final selection of features, implementation decisions, debugging,
+        file organisation, and deployment choices were made during the completion
+        of this project.
     </p>
 </div>
 
