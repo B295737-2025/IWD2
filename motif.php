@@ -121,6 +121,14 @@ if ($data === null && $input_file !== '') {
         file_put_contents($raw_absolute, $scan_data['combined_raw_report']);
     }
 
+    $stats_basename = $input_basename . '_motif_stats.json';
+    $stats_absolute = $results_dir . '/' . $stats_basename;
+    $stats_relative = 'results/' . $stats_basename;
+
+    $stats_plot_basename = $input_basename . '_motif_stats.png';
+    $stats_plot_absolute = $results_dir . '/' . $stats_plot_basename;
+    $stats_plot_relative = 'results/' . $stats_plot_basename;
+
     $data = [
         'status' => 'ok',
         'message' => '',
@@ -132,7 +140,11 @@ if ($data === null && $input_file !== '') {
         'sequences_with_hits' => $scan_data['sequences_with_hits'] ?? 0,
         'total_hits' => $scan_data['total_hits'] ?? 0,
         'results' => $scan_data['results'] ?? [],
-        'combined_raw_report' => $scan_data['combined_raw_report'] ?? ''
+        'combined_raw_report' => $scan_data['combined_raw_report'] ?? '',
+        'motif_stats_file' => file_exists($stats_absolute) ? $stats_relative : '',
+        'motif_stats_plot_file' => file_exists($stats_plot_absolute) ? $stats_plot_relative : '',
+        'motif_stats_plot_created' => file_exists($stats_plot_absolute),
+        'motif_stats_plot_error' => ''
     ];
 }
 
