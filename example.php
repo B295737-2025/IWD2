@@ -102,6 +102,12 @@ if ($motif_raw_text === false) {
     $motif_raw_text = '';
 }
 
+$example_conservation_profile = 'results/examples/aligned_glucose-6-phosphatase_Aves_example_conservation_profile.tsv';
+$example_conservation_plot = 'results/examples/aligned_glucose-6-phosphatase_Aves_example_conservation_plot.png';
+
+$conservation_profile_exists = file_exists(__DIR__ . '/' . $example_conservation_profile);
+$conservation_plot_exists = file_exists(__DIR__ . '/' . $example_conservation_plot);
+
 require_once __DIR__ . '/lib/site_header.php';
 ?>
 
@@ -121,6 +127,12 @@ require_once __DIR__ . '/lib/site_header.php';
         <a href="<?php echo htmlspecialchars($example_files['aligned_fasta']); ?>">Aligned FASTA</a>
         <a href="<?php echo htmlspecialchars($example_files['identity_matrix']); ?>">Identity matrix</a>
         <a href="<?php echo htmlspecialchars($example_files['conservation_summary']); ?>">Conservation summary JSON</a>
+        <?php if ($conservation_profile_exists): ?>
+            <a href="<?php echo htmlspecialchars($example_conservation_profile); ?>">Conservation profile TSV</a>
+        <?php endif; ?>
+        <?php if ($conservation_plot_exists): ?>
+            <a href="<?php echo htmlspecialchars($example_conservation_plot); ?>">Conservation plot PNG</a>
+        <?php endif; ?>
         <a href="<?php echo htmlspecialchars($example_files['motif_summary']); ?>">Motif summary JSON</a>
         <a href="<?php echo htmlspecialchars($example_files['motif_raw']); ?>">Raw motif report</a>
         <a href="<?php echo htmlspecialchars($example_files['tree_newick']); ?>">Newick tree</a>
@@ -139,6 +151,19 @@ require_once __DIR__ . '/lib/site_header.php';
     <p><strong>Minimum pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['minimum_pairwise_identity'] ?? '')); ?>%</p>
     <p><strong>Maximum pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['maximum_pairwise_identity'] ?? '')); ?>%</p>
     <p><strong>Average compared non-gap sites:</strong> <?php echo htmlspecialchars((string)($conservation_data['average_compared_sites'] ?? '')); ?></p>
+
+    <?php if ($conservation_plot_exists): ?>
+        <h3>Conservation profile</h3>
+        <img src="<?php echo htmlspecialchars($example_conservation_plot); ?>" alt="Example dataset conservation profile">
+    <?php endif; ?>
+
+    <?php if ($conservation_profile_exists): ?>
+        <p>
+            <a href="<?php echo htmlspecialchars($example_conservation_profile); ?>">
+                Download conservation profile (TSV)
+            </a>
+        </p>
+    <?php endif; ?>
 </div>
 
 <div class="box">

@@ -53,6 +53,15 @@ $aligned_relative = 'results/' . $aligned_basename;
 $matrix_relative  = 'results/' . $matrix_basename;
 $summary_relative = 'results/' . $summary_basename;
 
+$profile_basename = 'aligned_' . $input_basename . '_conservation_profile.tsv';
+$plot_basename    = 'aligned_' . $input_basename . '_conservation_plot.png';
+
+$profile_absolute = $results_dir . '/' . $profile_basename;
+$plot_absolute    = $results_dir . '/' . $plot_basename;
+
+$profile_relative = 'results/' . $profile_basename;
+$plot_relative    = 'results/' . $plot_basename;
+
 /*
  * This page only displays existing conservation analysis results.
  * If the required output files are not present yet, redirect to the status page.
@@ -117,6 +126,12 @@ require_once __DIR__ . '/lib/site_header.php';
         <li><strong>Aligned FASTA:</strong> <a href="<?php echo htmlspecialchars($aligned_relative); ?>"><?php echo htmlspecialchars($aligned_relative); ?></a></li>
         <li><strong>Identity matrix:</strong> <a href="<?php echo htmlspecialchars($matrix_relative); ?>"><?php echo htmlspecialchars($matrix_relative); ?></a></li>
         <li><strong>Summary JSON:</strong> <a href="<?php echo htmlspecialchars($summary_relative); ?>"><?php echo htmlspecialchars($summary_relative); ?></a></li>
+        <?php if (file_exists($profile_absolute)): ?>
+            <li><strong>Conservation profile TSV:</strong> <a href="<?php echo htmlspecialchars($profile_relative); ?>"><?php echo htmlspecialchars($profile_relative); ?></a></li>
+        <?php endif; ?>
+        <?php if (file_exists($plot_absolute)): ?>
+            <li><strong>Conservation plot PNG:</strong> <a href="<?php echo htmlspecialchars($plot_relative); ?>"><?php echo htmlspecialchars($plot_relative); ?></a></li>
+        <?php endif; ?>
     </ul>
     <p class="small">
         Result files are retained on the server for 60 days.
@@ -146,6 +161,28 @@ require_once __DIR__ . '/lib/site_header.php';
     <p><strong>Minimum pairwise identity:</strong> <?php echo htmlspecialchars((string)$min_identity); ?>%</p>
     <p><strong>Maximum pairwise identity:</strong> <?php echo htmlspecialchars((string)$max_identity); ?>%</p>
     <p><strong>Average compared non-gap sites:</strong> <?php echo htmlspecialchars((string)$avg_compared); ?></p>
+</div>
+
+<div class="box">
+    <h2>Conservation profile</h2>
+
+    <?php if (file_exists($plot_absolute)): ?>
+        <p>
+            This plot shows how strongly conserved each alignment column is across
+            the selected sequence set.
+        </p>
+        <img src="<?php echo htmlspecialchars($plot_relative); ?>" alt="Conservation profile plot">
+    <?php else: ?>
+        <p class="warn">Conservation plot PNG is not available.</p>
+    <?php endif; ?>
+
+    <?php if (file_exists($profile_absolute)): ?>
+        <p>
+            <a href="<?php echo htmlspecialchars($profile_relative); ?>">
+                Download conservation profile (TSV)
+            </a>
+        </p>
+    <?php endif; ?>
 </div>
 
 <div class="box">
