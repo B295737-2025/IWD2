@@ -1,4 +1,7 @@
 <?php
+$page_title = 'Example Dataset';
+$active_page = 'example';
+
 $example_files = [
     'raw_fasta' => 'results/examples/glucose-6-phosphatase_Aves_example.fasta',
     'aligned_fasta' => 'results/examples/aligned_glucose-6-phosphatase_Aves_example.fasta',
@@ -12,52 +15,22 @@ $example_files = [
 ];
 
 function error_page($message, $detail = '') {
+    global $page_title, $active_page;
+    require_once __DIR__ . '/lib/site_header.php';
     ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Example Dataset</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                max-width: 1000px;
-                margin: 40px auto;
-                line-height: 1.6;
-                padding: 0 20px;
-            }
-            .box {
-                border: 1px solid #ccc;
-                padding: 20px;
-                border-radius: 8px;
-                background: #f9f9f9;
-                margin-bottom: 20px;
-            }
-            .err {
-                color: #a10000;
-            }
-            pre {
-                white-space: pre-wrap;
-                word-break: break-word;
-                background: #f3f3f3;
-                padding: 12px;
-                border-radius: 6px;
-            }
-        </style>
-    </head>
-    <body>
+    <div class="hero">
         <h1>Example Dataset</h1>
-        <div class="box">
-            <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($message); ?></p>
-            <?php if ($detail !== ''): ?>
-                <pre><?php echo htmlspecialchars($detail); ?></pre>
-            <?php endif; ?>
-        </div>
-        <p><a href="index.php">Back to home</a></p>
-    </body>
-    </html>
+        <p>An error occurred while loading the pre-computed example dataset.</p>
+    </div>
+
+    <div class="box">
+        <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($message); ?></p>
+        <?php if ($detail !== ''): ?>
+            <pre><?php echo htmlspecialchars($detail); ?></pre>
+        <?php endif; ?>
+    </div>
     <?php
+    require_once __DIR__ . '/lib/site_footer.php';
     exit;
 }
 
@@ -128,171 +101,99 @@ $motif_raw_text = file_get_contents(__DIR__ . '/' . $example_files['motif_raw'])
 if ($motif_raw_text === false) {
     $motif_raw_text = '';
 }
+
+require_once __DIR__ . '/lib/site_header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example Dataset</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1100px;
-            margin: 40px auto;
-            line-height: 1.6;
-            padding: 0 20px;
-        }
-        .box {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 8px;
-            background: #f9f9f9;
-            margin-bottom: 20px;
-        }
-        h1, h2 {
-            color: #1f4e79;
-        }
-        a {
-            color: #1f4e79;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .note {
-            color: #555;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            background: white;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-            vertical-align: top;
-        }
-        th {
-            background: #eaf2f8;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ccc;
-            background: white;
-        }
-        pre {
-            white-space: pre-wrap;
-            word-break: break-word;
-            background: #f3f3f3;
-            padding: 12px;
-            border-radius: 6px;
-            overflow-x: auto;
-        }
-        details {
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
+
+<div class="hero">
     <h1>Example Dataset</h1>
+    <p>
+        Explore the fixed reference dataset based on
+        <strong>glucose-6-phosphatase proteins from Aves</strong>.
+        This page uses pre-computed files and does not run any new retrieval or analysis.
+    </p>
+</div>
 
-    <div class="box">
-        <p>
-            This is the pre-processed example dataset:
-            <strong>glucose-6-phosphatase proteins from Aves</strong>.
-        </p>
-        <p class="note">
-            This page presents a fixed example dataset with pre-computed results. No new retrieval or analysis is performed when viewing this page.
-        </p>
-    </div>
-
-    <div class="box">
-        <h2>Example files</h2>
-        <ul>
-            <li><a href="<?php echo htmlspecialchars($example_files['raw_fasta']); ?>">Raw FASTA</a></li>
-            <li><a href="<?php echo htmlspecialchars($example_files['aligned_fasta']); ?>">Aligned FASTA</a></li>
-            <li><a href="<?php echo htmlspecialchars($example_files['identity_matrix']); ?>">Identity matrix</a></li>
-            <li><a href="<?php echo htmlspecialchars($example_files['conservation_summary']); ?>">Conservation summary JSON</a></li>
-            <li><a href="<?php echo htmlspecialchars($example_files['motif_summary']); ?>">Motif summary JSON</a></li>
-            <li><a href="<?php echo htmlspecialchars($example_files['motif_raw']); ?>">Raw motif report</a></li>
-            <li><a href="<?php echo htmlspecialchars($example_files['tree_newick']); ?>">Newick tree</a></li>
-            <li><a href="<?php echo htmlspecialchars($example_files['tree_summary']); ?>">Tree summary JSON</a></li>
-            <?php if ($tree_png_exists): ?>
-                <li><a href="<?php echo htmlspecialchars($example_files['tree_png']); ?>">Tree image PNG</a></li>
-            <?php endif; ?>
-        </ul>
-    </div>
-
-    <div class="box">
-        <h2>Conservation summary</h2>
-        <p><strong>Sequence count:</strong> <?php echo htmlspecialchars((string)($conservation_data['sequence_count'] ?? '')); ?></p>
-        <p><strong>Alignment length:</strong> <?php echo htmlspecialchars((string)($conservation_data['alignment_length'] ?? '')); ?> aa</p>
-        <p><strong>Average pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['average_pairwise_identity'] ?? '')); ?>%</p>
-        <p><strong>Minimum pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['minimum_pairwise_identity'] ?? '')); ?>%</p>
-        <p><strong>Maximum pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['maximum_pairwise_identity'] ?? '')); ?>%</p>
-        <p><strong>Average compared non-gap sites:</strong> <?php echo htmlspecialchars((string)($conservation_data['average_compared_sites'] ?? '')); ?></p>
-    </div>
-
-    <div class="box">
-        <h2>Motif summary</h2>
-        <p><strong>Total sequences scanned:</strong> <?php echo htmlspecialchars((string)($motif_data['sequence_count'] ?? '')); ?></p>
-        <p><strong>Sequences with motif hits:</strong> <?php echo htmlspecialchars((string)($motif_data['sequences_with_hits'] ?? '')); ?></p>
-        <p><strong>Total motif hits:</strong> <?php echo htmlspecialchars((string)($motif_data['total_hits'] ?? '')); ?></p>
-
-        <?php if (empty($motif_hits)): ?>
-            <p>No motif hit positions were found in this example dataset.</p>
-        <?php else: ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sequence ID</th>
-                        <th>Motif</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Motif length</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($motif_hits as $row): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($row['sequence_id']); ?></td>
-                            <td><?php echo htmlspecialchars($row['motif']); ?></td>
-                            <td><?php echo htmlspecialchars((string)$row['start']); ?></td>
-                            <td><?php echo htmlspecialchars((string)$row['end']); ?></td>
-                            <td><?php echo htmlspecialchars((string)$row['length']); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-
-        <?php if ($motif_raw_text !== ''): ?>
-            <details>
-                <summary>Show raw motif report</summary>
-                <pre><?php echo htmlspecialchars($motif_raw_text); ?></pre>
-            </details>
-        <?php endif; ?>
-    </div>
-
-    <div class="box">
-        <h2>Phylogenetic tree summary</h2>
-        <p><strong>Total sequences in tree:</strong> <?php echo htmlspecialchars((string)($tree_data['sequence_count'] ?? '')); ?></p>
-        <p><strong>Minimum pairwise distance:</strong> <?php echo htmlspecialchars((string)($tree_data['min_distance'] ?? '')); ?></p>
-        <p><strong>Maximum pairwise distance:</strong> <?php echo htmlspecialchars((string)($tree_data['max_distance'] ?? '')); ?></p>
-        <p><strong>Average pairwise distance:</strong> <?php echo htmlspecialchars((string)($tree_data['average_distance'] ?? '')); ?></p>
-
+<div class="box">
+    <h2>Example files</h2>
+    <div class="link-row">
+        <a href="<?php echo htmlspecialchars($example_files['raw_fasta']); ?>">Raw FASTA</a>
+        <a href="<?php echo htmlspecialchars($example_files['aligned_fasta']); ?>">Aligned FASTA</a>
+        <a href="<?php echo htmlspecialchars($example_files['identity_matrix']); ?>">Identity matrix</a>
+        <a href="<?php echo htmlspecialchars($example_files['conservation_summary']); ?>">Conservation summary JSON</a>
+        <a href="<?php echo htmlspecialchars($example_files['motif_summary']); ?>">Motif summary JSON</a>
+        <a href="<?php echo htmlspecialchars($example_files['motif_raw']); ?>">Raw motif report</a>
+        <a href="<?php echo htmlspecialchars($example_files['tree_newick']); ?>">Newick tree</a>
+        <a href="<?php echo htmlspecialchars($example_files['tree_summary']); ?>">Tree summary JSON</a>
         <?php if ($tree_png_exists): ?>
-            <img src="<?php echo htmlspecialchars($example_files['tree_png']); ?>" alt="Example dataset phylogenetic tree">
-        <?php else: ?>
-            <p>Tree PNG image is not available.</p>
+            <a href="<?php echo htmlspecialchars($example_files['tree_png']); ?>">Tree image PNG</a>
         <?php endif; ?>
     </div>
+</div>
 
-    <p><a href="index.php">Back to home</a></p>
-    <p><a href="history.php">View history</a></p>
-</body>
-</html>
+<div class="box">
+    <h2>Conservation summary</h2>
+    <p><strong>Sequence count:</strong> <?php echo htmlspecialchars((string)($conservation_data['sequence_count'] ?? '')); ?></p>
+    <p><strong>Alignment length:</strong> <?php echo htmlspecialchars((string)($conservation_data['alignment_length'] ?? '')); ?> aa</p>
+    <p><strong>Average pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['average_pairwise_identity'] ?? '')); ?>%</p>
+    <p><strong>Minimum pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['minimum_pairwise_identity'] ?? '')); ?>%</p>
+    <p><strong>Maximum pairwise identity:</strong> <?php echo htmlspecialchars((string)($conservation_data['maximum_pairwise_identity'] ?? '')); ?>%</p>
+    <p><strong>Average compared non-gap sites:</strong> <?php echo htmlspecialchars((string)($conservation_data['average_compared_sites'] ?? '')); ?></p>
+</div>
+
+<div class="box">
+    <h2>Motif summary</h2>
+    <p><strong>Total sequences scanned:</strong> <?php echo htmlspecialchars((string)($motif_data['sequence_count'] ?? '')); ?></p>
+    <p><strong>Sequences with motif hits:</strong> <?php echo htmlspecialchars((string)($motif_data['sequences_with_hits'] ?? '')); ?></p>
+    <p><strong>Total motif hits:</strong> <?php echo htmlspecialchars((string)($motif_data['total_hits'] ?? '')); ?></p>
+
+    <?php if (empty($motif_hits)): ?>
+        <p>No motif hit positions were found in this example dataset.</p>
+    <?php else: ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sequence ID</th>
+                    <th>Motif</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Motif length</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($motif_hits as $row): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['sequence_id']); ?></td>
+                        <td><?php echo htmlspecialchars($row['motif']); ?></td>
+                        <td><?php echo htmlspecialchars((string)$row['start']); ?></td>
+                        <td><?php echo htmlspecialchars((string)$row['end']); ?></td>
+                        <td><?php echo htmlspecialchars((string)$row['length']); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+
+    <?php if ($motif_raw_text !== ''): ?>
+        <details>
+            <summary>Show raw motif report</summary>
+            <pre><?php echo htmlspecialchars($motif_raw_text); ?></pre>
+        </details>
+    <?php endif; ?>
+</div>
+
+<div class="box">
+    <h2>Phylogenetic tree summary</h2>
+    <p><strong>Total sequences in tree:</strong> <?php echo htmlspecialchars((string)($tree_data['sequence_count'] ?? '')); ?></p>
+    <p><strong>Minimum pairwise distance:</strong> <?php echo htmlspecialchars((string)($tree_data['min_distance'] ?? '')); ?></p>
+    <p><strong>Maximum pairwise distance:</strong> <?php echo htmlspecialchars((string)($tree_data['max_distance'] ?? '')); ?></p>
+    <p><strong>Average pairwise distance:</strong> <?php echo htmlspecialchars((string)($tree_data['average_distance'] ?? '')); ?></p>
+
+    <?php if ($tree_png_exists): ?>
+        <img src="<?php echo htmlspecialchars($example_files['tree_png']); ?>" alt="Example dataset phylogenetic tree">
+    <?php else: ?>
+        <p>Tree PNG image is not available.</p>
+    <?php endif; ?>
+</div>
+
+<?php require_once __DIR__ . '/lib/site_footer.php'; ?>

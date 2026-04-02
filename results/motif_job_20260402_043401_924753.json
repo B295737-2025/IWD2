@@ -1,0 +1,502 @@
+{
+    "status": "ok",
+    "message": "",
+    "detail": "",
+    "input_file": "results/glucose-6-phosphatase_Aves_20260402_053357.fasta",
+    "summary_file": "results/glucose-6-phosphatase_Aves_20260402_053357_motif_summary.json",
+    "raw_file": "results/glucose-6-phosphatase_Aves_20260402_053357_motif_raw.txt",
+    "sequence_count": 50,
+    "sequences_with_hits": 11,
+    "total_hits": 11,
+    "results": [
+        {
+            "status": "ok",
+            "sequence_id": "KAN4049539.1",
+            "length": 299,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmprsbxq6_u/one.fasta\n#    -outfile /tmp/tmprsbxq6_u/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmprsbxq6_u/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4049539.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4049538.1",
+            "length": 299,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp1b9r8yl6/one.fasta\n#    -outfile /tmp/tmp1b9r8yl6/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp1b9r8yl6/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4049538.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4049537.1",
+            "length": 355,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpkky3mzrh/one.fasta\n#    -outfile /tmp/tmpkky3mzrh/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpkky3mzrh/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4049537.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4049536.1",
+            "length": 355,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpr1fz92bu/one.fasta\n#    -outfile /tmp/tmpr1fz92bu/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpr1fz92bu/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4049536.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4028371.1",
+            "length": 259,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmps7yolv1q/one.fasta\n#    -outfile /tmp/tmps7yolv1q/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmps7yolv1q/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028371.1     from: 1   to: 259\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4028370.1",
+            "length": 259,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpb_sveozl/one.fasta\n#    -outfile /tmp/tmpb_sveozl/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpb_sveozl/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028370.1     from: 1   to: 259\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4028369.1",
+            "length": 260,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpa2sykv4d/one.fasta\n#    -outfile /tmp/tmpa2sykv4d/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpa2sykv4d/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028369.1     from: 1   to: 260\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4028368.1",
+            "length": 271,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpjuio_uab/one.fasta\n#    -outfile /tmp/tmpjuio_uab/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpjuio_uab/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028368.1     from: 1   to: 271\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4028367.1",
+            "length": 285,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpx24am3d0/one.fasta\n#    -outfile /tmp/tmpx24am3d0/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpx24am3d0/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028367.1     from: 1   to: 285\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4028366.1",
+            "length": 299,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpjqxgyves/one.fasta\n#    -outfile /tmp/tmpjqxgyves/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpjqxgyves/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028366.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4028365.1",
+            "length": 299,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp0aa0kio5/one.fasta\n#    -outfile /tmp/tmp0aa0kio5/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp0aa0kio5/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028365.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4028364.1",
+            "length": 355,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpd1jtg5kl/one.fasta\n#    -outfile /tmp/tmpd1jtg5kl/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpd1jtg5kl/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028364.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4020167.1",
+            "length": 358,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "AMIDATION",
+                    "start": "139",
+                    "end": "142",
+                    "length": "4",
+                    "raw": "Length = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp9ikvl80v/one.fasta\n#    -outfile /tmp/tmp9ikvl80v/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp9ikvl80v/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4020167.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSTAMGKKQLRTL\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4019825.1",
+            "length": 342,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpypbbr81j/one.fasta\n#    -outfile /tmp/tmpypbbr81j/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpypbbr81j/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4019825.1     from: 1   to: 342\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN4019824.1",
+            "length": 389,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp926wvc_g/one.fasta\n#    -outfile /tmp/tmp926wvc_g/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp926wvc_g/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4019824.1     from: 1   to: 389\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3988656.1",
+            "length": 358,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpwyjh5p8n/one.fasta\n#    -outfile /tmp/tmpwyjh5p8n/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpwyjh5p8n/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3988656.1     from: 1   to: 358\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3988622.1",
+            "length": 342,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp_sx7vs6w/one.fasta\n#    -outfile /tmp/tmp_sx7vs6w/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp_sx7vs6w/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3988622.1     from: 1   to: 342\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3988621.1",
+            "length": 342,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpvlishu5k/one.fasta\n#    -outfile /tmp/tmpvlishu5k/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpvlishu5k/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3988621.1     from: 1   to: 342\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3988620.1",
+            "length": 351,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmppdwd9xwi/one.fasta\n#    -outfile /tmp/tmppdwd9xwi/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmppdwd9xwi/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3988620.1     from: 1   to: 351\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3937019.1",
+            "length": 355,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpzxc6ej0m/one.fasta\n#    -outfile /tmp/tmpzxc6ej0m/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpzxc6ej0m/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3937019.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3909434.1",
+            "length": 358,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "AMIDATION",
+                    "start": "139",
+                    "end": "142",
+                    "length": "4",
+                    "raw": "Length = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp9257jpyo/one.fasta\n#    -outfile /tmp/tmp9257jpyo/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp9257jpyo/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3909434.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSAAMGKKQSRTL\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3898344.1",
+            "length": 342,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "AMIDATION",
+                    "start": "271",
+                    "end": "274",
+                    "length": "4",
+                    "raw": "Length = 4\nStart = position 271 of sequence\nEnd = position 274 of sequence\n\nMotif = AMIDATION"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpzr7gr0pf/one.fasta\n#    -outfile /tmp/tmpzr7gr0pf/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpzr7gr0pf/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3898344.1     from: 1   to: 342\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 271 of sequence\nEnd = position 274 of sequence\n\nMotif = AMIDATION\n\nAFPLPRGRRLDPRQ\n     |  |\n   271  274\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3815460.1",
+            "length": 355,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmphaw6oy3c/one.fasta\n#    -outfile /tmp/tmphaw6oy3c/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmphaw6oy3c/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3815460.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3796834.1",
+            "length": 358,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "AMIDATION",
+                    "start": "139",
+                    "end": "142",
+                    "length": "4",
+                    "raw": "Length = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp3a_2t2l0/one.fasta\n#    -outfile /tmp/tmp3a_2t2l0/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp3a_2t2l0/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3796834.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSTAMGKKQLRTF\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3796733.1",
+            "length": 340,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "LEUCINE_ZIPPER",
+                    "start": "195",
+                    "end": "216",
+                    "length": "22",
+                    "raw": "Length = 22\nStart = position 195 of sequence\nEnd = position 216 of sequence\n\nMotif = LEUCINE_ZIPPER"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp590s03oy/one.fasta\n#    -outfile /tmp/tmp590s03oy/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp590s03oy/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3796733.1     from: 1   to: 340\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 22\nStart = position 195 of sequence\nEnd = position 216 of sequence\n\nMotif = LEUCINE_ZIPPER\n\nTARSPLFLAATALALPLGSLALHGLALAAGLD\n     |                    |\n   195                    216\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3276177.1",
+            "length": 355,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp5sizkxhy/one.fasta\n#    -outfile /tmp/tmp5sizkxhy/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp5sizkxhy/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3276177.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3244679.1",
+            "length": 412,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "AMIDATION",
+                    "start": "193",
+                    "end": "196",
+                    "length": "4",
+                    "raw": "Length = 4\nStart = position 193 of sequence\nEnd = position 196 of sequence\n\nMotif = AMIDATION"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp2wr6pfr0/one.fasta\n#    -outfile /tmp/tmp2wr6pfr0/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp2wr6pfr0/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3244679.1     from: 1   to: 412\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 193 of sequence\nEnd = position 196 of sequence\n\nMotif = AMIDATION\n\nLLSAAMGKKQSRTL\n     |  |\n   193  196\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN3244455.1",
+            "length": 343,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmprxlrb1i_/one.fasta\n#    -outfile /tmp/tmprxlrb1i_/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmprxlrb1i_/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3244455.1     from: 1   to: 343\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN1728004.1",
+            "length": 342,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpzh_tmidg/one.fasta\n#    -outfile /tmp/tmpzh_tmidg/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpzh_tmidg/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN1728004.1     from: 1   to: 342\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "KAN1727817.1",
+            "length": 358,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "AMIDATION",
+                    "start": "139",
+                    "end": "142",
+                    "length": "4",
+                    "raw": "Length = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpavvrep9g/one.fasta\n#    -outfile /tmp/tmpavvrep9g/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpavvrep9g/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN1727817.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSAAAGKKQSRTL\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_081252512.1",
+            "length": 358,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "AMIDATION",
+                    "start": "139",
+                    "end": "142",
+                    "length": "4",
+                    "raw": "Length = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpbpvi0qrv/one.fasta\n#    -outfile /tmp/tmpbpvi0qrv/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpbpvi0qrv/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081252512.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSTAMGKKQARTL\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_081251926.1",
+            "length": 342,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmphfzx35jg/one.fasta\n#    -outfile /tmp/tmphfzx35jg/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmphfzx35jg/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081251926.1     from: 1   to: 342\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_081251925.1",
+            "length": 354,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpgtmb6hnq/one.fasta\n#    -outfile /tmp/tmpgtmb6hnq/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpgtmb6hnq/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081251925.1     from: 1   to: 354\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_081279448.1",
+            "length": 267,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp9gamdl3d/one.fasta\n#    -outfile /tmp/tmp9gamdl3d/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp9gamdl3d/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081279448.1     from: 1   to: 267\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_081279447.1",
+            "length": 295,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "AMIDATION",
+                    "start": "264",
+                    "end": "267",
+                    "length": "4",
+                    "raw": "Length = 4\nStart = position 264 of sequence\nEnd = position 267 of sequence\n\nMotif = AMIDATION"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpxew76s06/one.fasta\n#    -outfile /tmp/tmpxew76s06/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpxew76s06/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081279447.1     from: 1   to: 295\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 264 of sequence\nEnd = position 267 of sequence\n\nMotif = AMIDATION\n\nLSLIFDGRKLSREG\n     |  |\n   264  267\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_081279446.1",
+            "length": 295,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "AMIDATION",
+                    "start": "264",
+                    "end": "267",
+                    "length": "4",
+                    "raw": "Length = 4\nStart = position 264 of sequence\nEnd = position 267 of sequence\n\nMotif = AMIDATION"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpgb7dstyu/one.fasta\n#    -outfile /tmp/tmpgb7dstyu/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpgb7dstyu/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081279446.1     from: 1   to: 295\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 264 of sequence\nEnd = position 267 of sequence\n\nMotif = AMIDATION\n\nLSLIFDGRKLSREG\n     |  |\n   264  267\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_081279445.1",
+            "length": 299,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpho6_7vq_/one.fasta\n#    -outfile /tmp/tmpho6_7vq_/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpho6_7vq_/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081279445.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_081279444.1",
+            "length": 355,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp_natroej/one.fasta\n#    -outfile /tmp/tmp_natroej/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp_natroej/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081279444.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080421443.1",
+            "length": 358,
+            "hit_count": 1,
+            "hits": [
+                {
+                    "motif": "AMIDATION",
+                    "start": "139",
+                    "end": "142",
+                    "length": "4",
+                    "raw": "Length = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION"
+                }
+            ],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpe9hu0ve_/one.fasta\n#    -outfile /tmp/tmpe9hu0ve_/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpe9hu0ve_/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080421443.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSIVSGKRQSKTL\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080457172.1",
+            "length": 355,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpsdwfiqle/one.fasta\n#    -outfile /tmp/tmpsdwfiqle/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpsdwfiqle/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080457172.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080489744.1",
+            "length": 358,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmppr21m_by/one.fasta\n#    -outfile /tmp/tmppr21m_by/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmppr21m_by/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080489744.1     from: 1   to: 358\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080489380.1",
+            "length": 373,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpms56wnw7/one.fasta\n#    -outfile /tmp/tmpms56wnw7/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpms56wnw7/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080489380.1     from: 1   to: 373\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080478064.1",
+            "length": 264,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp1kzywzpf/one.fasta\n#    -outfile /tmp/tmp1kzywzpf/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp1kzywzpf/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478064.1     from: 1   to: 264\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080478071.1",
+            "length": 287,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp1zl3hzc2/one.fasta\n#    -outfile /tmp/tmp1zl3hzc2/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp1zl3hzc2/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478071.1     from: 1   to: 287\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080478070.1",
+            "length": 299,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp5rxtg56y/one.fasta\n#    -outfile /tmp/tmp5rxtg56y/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp5rxtg56y/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478070.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080478069.1",
+            "length": 299,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpk1b7w9ng/one.fasta\n#    -outfile /tmp/tmpk1b7w9ng/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpk1b7w9ng/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478069.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080478068.1",
+            "length": 299,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpvqj7zepn/one.fasta\n#    -outfile /tmp/tmpvqj7zepn/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpvqj7zepn/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478068.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080478067.1",
+            "length": 299,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpnjrio74f/one.fasta\n#    -outfile /tmp/tmpnjrio74f/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpnjrio74f/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478067.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080478066.1",
+            "length": 299,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp3f0atw0p/one.fasta\n#    -outfile /tmp/tmp3f0atw0p/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp3f0atw0p/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478066.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        },
+        {
+            "status": "ok",
+            "sequence_id": "XP_080478065.1",
+            "length": 306,
+            "hit_count": 0,
+            "hits": [],
+            "raw_report": "########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmppy5yow8h/one.fasta\n#    -outfile /tmp/tmppy5yow8h/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmppy5yow8h/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478065.1     from: 1   to: 306\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+        }
+    ],
+    "combined_raw_report": "########################################\n# Sequence: KAN4049539.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmprsbxq6_u/one.fasta\n#    -outfile /tmp/tmprsbxq6_u/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmprsbxq6_u/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4049539.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4049538.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp1b9r8yl6/one.fasta\n#    -outfile /tmp/tmp1b9r8yl6/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp1b9r8yl6/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4049538.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4049537.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpkky3mzrh/one.fasta\n#    -outfile /tmp/tmpkky3mzrh/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpkky3mzrh/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4049537.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4049536.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpr1fz92bu/one.fasta\n#    -outfile /tmp/tmpr1fz92bu/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpr1fz92bu/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4049536.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4028371.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmps7yolv1q/one.fasta\n#    -outfile /tmp/tmps7yolv1q/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmps7yolv1q/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028371.1     from: 1   to: 259\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4028370.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpb_sveozl/one.fasta\n#    -outfile /tmp/tmpb_sveozl/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpb_sveozl/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028370.1     from: 1   to: 259\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4028369.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpa2sykv4d/one.fasta\n#    -outfile /tmp/tmpa2sykv4d/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpa2sykv4d/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028369.1     from: 1   to: 260\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4028368.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpjuio_uab/one.fasta\n#    -outfile /tmp/tmpjuio_uab/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpjuio_uab/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028368.1     from: 1   to: 271\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4028367.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpx24am3d0/one.fasta\n#    -outfile /tmp/tmpx24am3d0/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpx24am3d0/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028367.1     from: 1   to: 285\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4028366.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:33:59\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpjqxgyves/one.fasta\n#    -outfile /tmp/tmpjqxgyves/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpjqxgyves/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028366.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4028365.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp0aa0kio5/one.fasta\n#    -outfile /tmp/tmp0aa0kio5/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp0aa0kio5/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028365.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4028364.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpd1jtg5kl/one.fasta\n#    -outfile /tmp/tmpd1jtg5kl/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpd1jtg5kl/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4028364.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4020167.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp9ikvl80v/one.fasta\n#    -outfile /tmp/tmp9ikvl80v/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp9ikvl80v/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4020167.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSTAMGKKQLRTL\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4019825.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpypbbr81j/one.fasta\n#    -outfile /tmp/tmpypbbr81j/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpypbbr81j/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4019825.1     from: 1   to: 342\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN4019824.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp926wvc_g/one.fasta\n#    -outfile /tmp/tmp926wvc_g/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp926wvc_g/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN4019824.1     from: 1   to: 389\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3988656.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpwyjh5p8n/one.fasta\n#    -outfile /tmp/tmpwyjh5p8n/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpwyjh5p8n/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3988656.1     from: 1   to: 358\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3988622.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp_sx7vs6w/one.fasta\n#    -outfile /tmp/tmp_sx7vs6w/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp_sx7vs6w/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3988622.1     from: 1   to: 342\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3988621.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpvlishu5k/one.fasta\n#    -outfile /tmp/tmpvlishu5k/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpvlishu5k/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3988621.1     from: 1   to: 342\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3988620.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmppdwd9xwi/one.fasta\n#    -outfile /tmp/tmppdwd9xwi/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmppdwd9xwi/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3988620.1     from: 1   to: 351\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3937019.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpzxc6ej0m/one.fasta\n#    -outfile /tmp/tmpzxc6ej0m/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpzxc6ej0m/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3937019.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3909434.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp9257jpyo/one.fasta\n#    -outfile /tmp/tmp9257jpyo/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp9257jpyo/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3909434.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSAAMGKKQSRTL\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3898344.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpzr7gr0pf/one.fasta\n#    -outfile /tmp/tmpzr7gr0pf/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpzr7gr0pf/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3898344.1     from: 1   to: 342\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 271 of sequence\nEnd = position 274 of sequence\n\nMotif = AMIDATION\n\nAFPLPRGRRLDPRQ\n     |  |\n   271  274\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3815460.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmphaw6oy3c/one.fasta\n#    -outfile /tmp/tmphaw6oy3c/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmphaw6oy3c/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3815460.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3796834.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp3a_2t2l0/one.fasta\n#    -outfile /tmp/tmp3a_2t2l0/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp3a_2t2l0/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3796834.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSTAMGKKQLRTF\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3796733.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp590s03oy/one.fasta\n#    -outfile /tmp/tmp590s03oy/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp590s03oy/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3796733.1     from: 1   to: 340\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 22\nStart = position 195 of sequence\nEnd = position 216 of sequence\n\nMotif = LEUCINE_ZIPPER\n\nTARSPLFLAATALALPLGSLALHGLALAAGLD\n     |                    |\n   195                    216\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3276177.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp5sizkxhy/one.fasta\n#    -outfile /tmp/tmp5sizkxhy/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp5sizkxhy/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3276177.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3244679.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp2wr6pfr0/one.fasta\n#    -outfile /tmp/tmp2wr6pfr0/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp2wr6pfr0/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3244679.1     from: 1   to: 412\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 193 of sequence\nEnd = position 196 of sequence\n\nMotif = AMIDATION\n\nLLSAAMGKKQSRTL\n     |  |\n   193  196\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN3244455.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmprxlrb1i_/one.fasta\n#    -outfile /tmp/tmprxlrb1i_/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmprxlrb1i_/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN3244455.1     from: 1   to: 343\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN1728004.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpzh_tmidg/one.fasta\n#    -outfile /tmp/tmpzh_tmidg/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpzh_tmidg/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN1728004.1     from: 1   to: 342\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: KAN1727817.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpavvrep9g/one.fasta\n#    -outfile /tmp/tmpavvrep9g/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpavvrep9g/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: KAN1727817.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSAAAGKKQSRTL\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_081252512.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpbpvi0qrv/one.fasta\n#    -outfile /tmp/tmpbpvi0qrv/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpbpvi0qrv/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081252512.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSTAMGKKQARTL\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_081251926.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmphfzx35jg/one.fasta\n#    -outfile /tmp/tmphfzx35jg/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmphfzx35jg/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081251926.1     from: 1   to: 342\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_081251925.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpgtmb6hnq/one.fasta\n#    -outfile /tmp/tmpgtmb6hnq/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpgtmb6hnq/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081251925.1     from: 1   to: 354\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_081279448.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp9gamdl3d/one.fasta\n#    -outfile /tmp/tmp9gamdl3d/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp9gamdl3d/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081279448.1     from: 1   to: 267\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_081279447.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpxew76s06/one.fasta\n#    -outfile /tmp/tmpxew76s06/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpxew76s06/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081279447.1     from: 1   to: 295\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 264 of sequence\nEnd = position 267 of sequence\n\nMotif = AMIDATION\n\nLSLIFDGRKLSREG\n     |  |\n   264  267\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_081279446.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpgb7dstyu/one.fasta\n#    -outfile /tmp/tmpgb7dstyu/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpgb7dstyu/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081279446.1     from: 1   to: 295\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 264 of sequence\nEnd = position 267 of sequence\n\nMotif = AMIDATION\n\nLSLIFDGRKLSREG\n     |  |\n   264  267\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_081279445.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpho6_7vq_/one.fasta\n#    -outfile /tmp/tmpho6_7vq_/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpho6_7vq_/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081279445.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_081279444.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp_natroej/one.fasta\n#    -outfile /tmp/tmp_natroej/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp_natroej/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_081279444.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080421443.1\n# HitCount: 1\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:00\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpe9hu0ve_/one.fasta\n#    -outfile /tmp/tmpe9hu0ve_/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpe9hu0ve_/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080421443.1     from: 1   to: 358\n# HitCount: 1\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\nLength = 4\nStart = position 139 of sequence\nEnd = position 142 of sequence\n\nMotif = AMIDATION\n\nLLSIVSGKRQSKTL\n     |  |\n   139  142\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080457172.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpsdwfiqle/one.fasta\n#    -outfile /tmp/tmpsdwfiqle/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpsdwfiqle/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080457172.1     from: 1   to: 355\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080489744.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmppr21m_by/one.fasta\n#    -outfile /tmp/tmppr21m_by/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmppr21m_by/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080489744.1     from: 1   to: 358\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080489380.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpms56wnw7/one.fasta\n#    -outfile /tmp/tmpms56wnw7/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpms56wnw7/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080489380.1     from: 1   to: 373\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080478064.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp1kzywzpf/one.fasta\n#    -outfile /tmp/tmp1kzywzpf/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp1kzywzpf/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478064.1     from: 1   to: 264\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080478071.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp1zl3hzc2/one.fasta\n#    -outfile /tmp/tmp1zl3hzc2/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp1zl3hzc2/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478071.1     from: 1   to: 287\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080478070.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp5rxtg56y/one.fasta\n#    -outfile /tmp/tmp5rxtg56y/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp5rxtg56y/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478070.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080478069.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpk1b7w9ng/one.fasta\n#    -outfile /tmp/tmpk1b7w9ng/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpk1b7w9ng/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478069.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080478068.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpvqj7zepn/one.fasta\n#    -outfile /tmp/tmpvqj7zepn/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpvqj7zepn/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478068.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080478067.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmpnjrio74f/one.fasta\n#    -outfile /tmp/tmpnjrio74f/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmpnjrio74f/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478067.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080478066.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmp3f0atw0p/one.fasta\n#    -outfile /tmp/tmp3f0atw0p/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmp3f0atw0p/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478066.1     from: 1   to: 299\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n\n\n########################################\n# Sequence: XP_080478065.1\n# HitCount: 0\n########################################\n\n########################################\n# Program: patmatmotifs\n# Rundate: Thu  2 Apr 2026 05:34:01\n# Commandline: patmatmotifs\n#    -sequence /tmp/tmppy5yow8h/one.fasta\n#    -outfile /tmp/tmppy5yow8h/one.patmatmotifs\n#    -full\n#    -auto\n# Report_format: dbmotif\n# Report_file: /tmp/tmppy5yow8h/one.patmatmotifs\n########################################\n\n#=======================================\n#\n# Sequence: XP_080478065.1     from: 1   to: 306\n# HitCount: 0\n#\n# Full: Yes\n# Prune: Yes\n# Data_file: /usr/share/EMBOSS/data/PROSITE/prosite.lines\n#\n#=======================================\n\n\n#---------------------------------------\n#---------------------------------------\n"
+}

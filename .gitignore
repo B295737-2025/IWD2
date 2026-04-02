@@ -1,0 +1,7 @@
+
+*.bak
+db_test.php
+all_code.txt
+
+__pycache__/
+*.pyc

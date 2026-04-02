@@ -1,167 +1,152 @@
 <?php
-require_once __DIR__ . '/lib/db_connect.php';
-require_once __DIR__ . '/lib/cleanup_results.php';
+$page_title = 'Fetch Sequences';
+$active_page = '';
 
-cleanup_old_results(__DIR__ . '/results', 60);
+$job_file = $_GET['job'] ?? '';
+$job_file = trim($job_file);
 
-$user_name = $_POST['user_name'] ?? 'guest';
-$family = $_POST['family'] ?? '';
-$taxon  = $_POST['taxon'] ?? '';
+$results_dir = realpath(__DIR__ . '/results');
 
-$user_name = trim($user_name);
-$family = trim($family);
-$taxon  = trim($taxon);
-
-if ($user_name === '') {
-    $user_name = 'guest';
-}
-
-$result = null;
-$raw_output = '';
-$history_saved = false;
-$history_error = '';
-
-if ($family !== '' && $taxon !== '') {
-    $python = '/usr/bin/python3';
-    $script = __DIR__ . '/lib/fetch_sequences.py';
-
-    $command = $python . ' '
-             . escapeshellarg($script) . ' '
-             . escapeshellarg($family) . ' '
-             . escapeshellarg($taxon) . ' 2>&1';
-
-    $raw_output = shell_exec($command);
-    $result = json_decode($raw_output, true);
-
-    if (is_array($result) && isset($result['status']) && $result['status'] === 'ok') {
-        try {
-            $stmt = $pdo->prepare(
-                "INSERT INTO history (user, family, taxon, result_link) VALUES (?, ?, ?, ?)"
-            );
-            $stmt->execute([
-                $user_name,
-                $family,
-                $taxon,
-                $result['result_file']
-            ]);
-            $history_saved = true;
-        } catch (PDOException $e) {
-            $history_error = $e->getMessage();
-        }
-    }
-}
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fetch Sequences</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 40px auto;
-            line-height: 1.6;
-            padding: 0 20px;
-        }
-        .box {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 8px;
-            background: #f9f9f9;
-            margin-bottom: 20px;
-        }
-        .ok {
-            color: #0a6b2d;
-        }
-        .warn {
-            color: #a15c00;
-        }
-        .err {
-            color: #a10000;
-        }
-        code, pre {
-            background: #f3f3f3;
-            padding: 2px 4px;
-        }
-        a {
-            color: #1f4e79;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
-</head>
-<body>
-    <h1>Fetch Sequences</h1>
+function error_page($message, $detail = '') {
+    global $page_title, $active_page;
+    require_once __DIR__ . '/lib/site_header.php';
+    ?>
+    <div class="hero">
+        <h1>Fetch Sequences</h1>
+        <p>An error occurred while loading the sequence retrieval result.</p>
+    </div>
 
     <div class="box">
-    <?php if ($family === '' || $taxon === ''): ?>
-        <p class="err"><strong>Error:</strong> missing protein family or taxonomic group.</p>
+        <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($message); ?></p>
+        <?php if ($detail !== ''): ?>
+            <pre><?php echo htmlspecialchars($detail); ?></pre>
+        <?php endif; ?>
+    </div>
+    <?php
+    require_once __DIR__ . '/lib/site_footer.php';
+    exit;
+}
 
-    <?php elseif (!is_array($result)): ?>
-        <p class="err"><strong>Error:</strong> Python script did not return valid JSON.</p>
+if ($job_file === '') {
+    error_page('No fetch result file was provided.');
+}
+
+$relative_job = ltrim($job_file, '/');
+$absolute_job = realpath(__DIR__ . '/' . $relative_job);
+
+if ($absolute_job === false || strpos($absolute_job, $results_dir) !== 0) {
+    error_page('Invalid fetch result file path.');
+}
+
+if (!file_exists($absolute_job)) {
+    error_page('Fetch result file does not exist.');
+}
+
+$json_text = file_get_contents($absolute_job);
+if ($json_text === false) {
+    error_page('Could not read fetch result file.');
+}
+
+$data = json_decode($json_text, true);
+if (!is_array($data)) {
+    error_page('Fetch result JSON is invalid.');
+}
+
+$user_name = $data['user_name'] ?? 'guest';
+$family = $data['family'] ?? '';
+$taxon = $data['taxon'] ?? '';
+$max_sequences_requested = $data['max_sequences_requested'] ?? '';
+$raw_output = $data['raw_output'] ?? '';
+$history_saved = $data['history_saved'] ?? false;
+$history_error = $data['history_error'] ?? '';
+
+require_once __DIR__ . '/lib/site_header.php';
+?>
+
+<div class="hero">
+    <h1>Fetch Sequences</h1>
+    <p>
+        Sequence retrieval has completed. Review the retrieved FASTA file,
+        preview the first records, and continue to conservation or motif analysis.
+    </p>
+</div>
+
+<div class="box">
+<?php if (($data['status'] ?? '') === 'empty'): ?>
+    <p><strong>User Name:</strong> <?php echo htmlspecialchars($user_name); ?></p>
+    <p><strong>Protein family:</strong> <?php echo htmlspecialchars($family); ?></p>
+    <p><strong>Taxonomic group:</strong> <?php echo htmlspecialchars($taxon); ?></p>
+    <p><strong>Maximum sequences requested:</strong> <?php echo htmlspecialchars((string)$max_sequences_requested); ?></p>
+    <p><strong>NCBI query:</strong> <?php echo htmlspecialchars($data['term'] ?? ''); ?></p>
+    <p class="warn"><?php echo htmlspecialchars($data['message'] ?? 'No matching protein sequences found.'); ?></p>
+
+<?php elseif (($data['status'] ?? '') === 'error'): ?>
+    <p><strong>User Name:</strong> <?php echo htmlspecialchars($user_name); ?></p>
+    <p><strong>Protein family:</strong> <?php echo htmlspecialchars($family); ?></p>
+    <p><strong>Taxonomic group:</strong> <?php echo htmlspecialchars($taxon); ?></p>
+    <p><strong>Maximum sequences requested:</strong> <?php echo htmlspecialchars((string)$max_sequences_requested); ?></p>
+    <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($data['message'] ?? 'Unknown error'); ?></p>
+    <?php if ($raw_output !== ''): ?>
         <pre><?php echo htmlspecialchars($raw_output); ?></pre>
+    <?php endif; ?>
 
-    <?php elseif ($result['status'] === 'empty'): ?>
-        <p><strong>User Name:</strong> <?php echo htmlspecialchars($user_name); ?></p>
-        <p><strong>NCBI query:</strong> <?php echo htmlspecialchars($result['term']); ?></p>
-        <p class="warn"><?php echo htmlspecialchars($result['message']); ?></p>
+<?php else: ?>
+    <p><strong>User Name:</strong> <?php echo htmlspecialchars($user_name); ?></p>
+    <p><strong>Protein family:</strong> <?php echo htmlspecialchars($family); ?></p>
+    <p><strong>Taxonomic group:</strong> <?php echo htmlspecialchars($taxon); ?></p>
+    <p><strong>Maximum sequences requested:</strong> <?php echo htmlspecialchars((string)$max_sequences_requested); ?></p>
+    <p><strong>NCBI query:</strong> <?php echo htmlspecialchars($data['term'] ?? ''); ?></p>
+    <p><strong>Sequences retrieved:</strong> <?php echo htmlspecialchars((string)($data['sequence_count'] ?? 0)); ?></p>
+    <p><strong>Saved FASTA:</strong>
+        <a href="<?php echo htmlspecialchars($data['result_file'] ?? ''); ?>">
+            <?php echo htmlspecialchars($data['result_file'] ?? ''); ?>
+        </a>
+    </p>
 
-    <?php elseif ($result['status'] === 'error'): ?>
-        <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($result['message']); ?></p>
-        <pre><?php echo htmlspecialchars($raw_output); ?></pre>
+    <p class="small">
+        Result files are retained on the server for 60 days. You can revisit
+        recent analyses from the history page during this period.
+    </p>
 
-    <?php else: ?>
-        <p><strong>User Name:</strong> <?php echo htmlspecialchars($user_name); ?></p>
-        <p><strong>Protein family:</strong> <?php echo htmlspecialchars($family); ?></p>
-        <p><strong>Taxonomic group:</strong> <?php echo htmlspecialchars($taxon); ?></p>
-        <p><strong>NCBI query:</strong> <?php echo htmlspecialchars($result['term']); ?></p>
-        <p><strong>Sequences retrieved:</strong> <?php echo htmlspecialchars((string)$result['sequence_count']); ?></p>
-        <p><strong>Saved FASTA:</strong>
-            <a href="<?php echo htmlspecialchars($result['result_file']); ?>">
-                <?php echo htmlspecialchars($result['result_file']); ?>
-            </a>
-        </p>
+    <?php if ($history_saved): ?>
+        <p class="ok"><strong>History:</strong> this query has been saved to the database.</p>
+    <?php elseif ($history_error !== ''): ?>
+        <p class="warn"><strong>History not saved:</strong> <?php echo htmlspecialchars($history_error); ?></p>
+    <?php endif; ?>
+<?php endif; ?>
+</div>
 
-        <p class="warn">
-            Result files are retained on the server for 60 days.
-            You can revisit recent analyses from the history page during this period.
-        </p>
-
+<?php if (($data['status'] ?? '') === 'ok'): ?>
+    <div class="box">
+        <h2>Next analyses</h2>
         <p>
-            <a href="analysis_status.php?file=<?php echo urlencode($result['result_file']); ?>">
+            <a href="analysis_status.php?file=<?php echo urlencode($data['result_file'] ?? ''); ?>">
                 Run conservation analysis
             </a>
         </p>
         <p>
-            <a href="motif.php?file=<?php echo urlencode($result['result_file']); ?>">
+            <a href="motif.php?file=<?php echo urlencode($data['result_file'] ?? ''); ?>">
                 Run motif scan
             </a>
         </p>
-
-        <?php if ($history_saved): ?>
-            <p class="ok"><strong>History:</strong> this query has been saved to the database.</p>
-        <?php elseif ($history_error !== ''): ?>
-            <p class="warn"><strong>History not saved:</strong> <?php echo htmlspecialchars($history_error); ?></p>
-        <?php endif; ?>
-
-        <h2>Preview (first 5 sequences)</h2>
-        <ul>
-            <?php foreach ($result['preview'] as $row): ?>
-                <li>
-                    <strong><?php echo htmlspecialchars($row['id']); ?></strong>
-                    (length: <?php echo htmlspecialchars((string)$row['length']); ?> aa)<br>
-                    <?php echo htmlspecialchars($row['description']); ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php endif; ?>
     </div>
 
-    <p><a href="index.php">Back to home</a></p>
-    <p><a href="history.php">View history</a></p>
-</body>
-</html>
+    <div class="box">
+        <h2>Preview (first 5 sequences)</h2>
+        <?php if (empty($data['preview'])): ?>
+            <p>No preview records are available.</p>
+        <?php else: ?>
+            <ul>
+                <?php foreach (($data['preview'] ?? []) as $row): ?>
+                    <li>
+                        <strong><?php echo htmlspecialchars($row['id'] ?? ''); ?></strong>
+                        (length: <?php echo htmlspecialchars((string)($row['length'] ?? '')); ?> aa)<br>
+                        <?php echo htmlspecialchars($row['description'] ?? ''); ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
+
+<?php require_once __DIR__ . '/lib/site_footer.php'; ?>

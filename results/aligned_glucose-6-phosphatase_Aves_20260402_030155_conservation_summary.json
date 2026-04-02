@@ -1,0 +1,12 @@
+{
+  "status": "ok",
+  "aligned_file": "/localdisk/home/s2809725/public_html/ICA/results/aligned_glucose-6-phosphatase_Aves_20260402_030155.fasta",
+  "sequence_count": 500,
+  "alignment_length": 1363,
+  "average_pairwise_identity": 53.96,
+  "minimum_pairwise_identity": 0.0,
+  "maximum_pairwise_identity": 100.0,
+  "average_compared_sites": 264.06,
+  "identity_matrix_file": "/localdisk/home/s2809725/public_html/ICA/results/aligned_glucose-6-phosphatase_Aves_20260402_030155_identity_matrix.tsv",
+  "summary_file": "/localdisk/home/s2809725/public_html/ICA/results/aligned_glucose-6-phosphatase_Aves_20260402_030155_conservation_summary.json"
+}

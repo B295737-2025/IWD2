@@ -13,11 +13,11 @@ def safe_name(text):
     text = re.sub(r'[^A-Za-z0-9._-]+', '_', text.strip())
     return text.strip('_') or 'query'
 
-def esearch_with_retry(term, retries=5, delay=5):
+def esearch_with_retry(term, retmax, retries=5, delay=5):
     last_error = None
     for attempt in range(1, retries + 1):
         try:
-            handle = Entrez.esearch(db="protein", term=term, retmax=50)
+            handle = Entrez.esearch(db="protein", term=term, retmax=retmax)
             record = Entrez.read(handle)
             handle.close()
             return record
@@ -48,25 +48,46 @@ def efetch_with_retry(id_list, retries=5, delay=5):
     raise last_error
 
 def main():
-    if len(sys.argv) != 3:
+    if len(sys.argv) != 4:
         print(json.dumps({
             "status": "error",
-            "message": "Usage: fetch_sequences.py <family> <taxon>"
+            "message": "Usage: fetch_sequences.py <family> <taxon> <max_sequences>"
         }))
         return
-
+    
     family = sys.argv[1].strip()
     taxon = sys.argv[2].strip()
 
-    Entrez.email = "z.zhou-131@sms.ed.ac.uk"
-    Entrez.api_key = "1298381c627756624579d8ed0f032bf30e08"
+    try:
+        max_sequences = int(sys.argv[3])
+    except ValueError:
+        print(json.dumps({
+            "status": "error",
+            "message": "max_sequences must be an integer."
+        }))
+        return
+
+    if max_sequences < 1:
+        max_sequences = 1
+    if max_sequences > 1000:
+        max_sequences = 1000
+
+    Entrez.email = os.getenv("ENTREZ_EMAIL", "").strip()
+    Entrez.api_key = os.getenv("ENTREZ_API_KEY", "").strip()
     Entrez.max_tries = 5
     Entrez.sleep_between_tries = 5
+    
+    if not Entrez.email:
+        print(json.dumps({
+            "status": "error",
+            "message": "ENTREZ_EMAIL is not configured."
+        }))
+        return
 
     term = f"{family} AND {taxon}[Organism]"
 
     try:
-        record = esearch_with_retry(term, retries=5, delay=5)
+        record = esearch_with_retry(term, max_sequences, retries=5, delay=5)
     except Exception as e:
         print(json.dumps({
             "status": "error",
@@ -118,6 +139,7 @@ def main():
         "status": "ok",
         "term": term,
         "sequence_count": len(records),
+        "max_sequences_requested": max_sequences,
         "result_file": f"results/{filename}",
         "preview": preview
     }))

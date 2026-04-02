@@ -1,4 +1,7 @@
 <?php
+$page_title = 'Query History';
+$active_page = 'history';
+
 require_once __DIR__ . '/lib/db_connect.php';
 
 $filter_user = trim($_GET['user_name'] ?? '');
@@ -61,6 +64,11 @@ function file_exists_in_results($relative_path, $results_dir) {
 function aligned_relative_from_raw($raw_relative) {
     $raw_relative = ltrim($raw_relative, '/');
     $base = pathinfo($raw_relative, PATHINFO_FILENAME);
+
+    if (strpos($raw_relative, 'results/examples/') === 0) {
+        return 'results/examples/aligned_' . $base . '.fasta';
+    }
+
     return 'results/aligned_' . $base . '.fasta';
 }
 
@@ -96,147 +104,153 @@ foreach ($rows as $row) {
         $unavailable_rows[] = $record;
     }
 }
+
+$example_available_rows = [];
+$normal_available_rows = [];
+
+foreach ($available_rows as $row) {
+    if (!empty($row['is_example'])) {
+        $example_available_rows[] = $row;
+    } else {
+        $normal_available_rows[] = $row;
+    }
+}
+
+$available_rows = array_merge($example_available_rows, $normal_available_rows);
+
+$example_unavailable_rows = [];
+$normal_unavailable_rows = [];
+
+foreach ($unavailable_rows as $row) {
+    if (!empty($row['is_example'])) {
+        $example_unavailable_rows[] = $row;
+    } else {
+        $normal_unavailable_rows[] = $row;
+    }
+}
+
+$unavailable_rows = array_merge($example_unavailable_rows, $normal_unavailable_rows);
+
+require_once __DIR__ . '/lib/site_header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Query History</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1100px;
-            margin: 40px auto;
-            line-height: 1.6;
-            padding: 0 20px;
-        }
-        .box {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 8px;
-            background: #f9f9f9;
-            margin-bottom: 20px;
-        }
-        h1, h2 {
-            color: #1f4e79;
-        }
-        a {
-            color: #1f4e79;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        form.filter-form {
-            display: grid;
-            grid-template-columns: 160px 1fr;
-            gap: 10px 12px;
-            align-items: center;
-            max-width: 760px;
-        }
-        input[type="text"] {
-            padding: 8px;
-            width: 100%;
-            max-width: 420px;
-        }
-        .button-row {
-            grid-column: 2;
-        }
-        input[type="submit"], .clear-link {
-            padding: 9px 14px;
-            display: inline-block;
-            margin-right: 8px;
-        }
-        .clear-link {
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background: #f3f3f3;
-            color: #333;
-            text-decoration: none;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            background: white;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-            vertical-align: top;
-        }
-        th {
-            background: #eaf2f8;
-        }
-        .warn {
-            color: #a15c00;
-        }
-        .err {
-            color: #a10000;
-        }
-        .small {
-            color: #555;
-            font-size: 0.95em;
-        }
-        details {
-            margin-top: 10px;
-        }
-        summary {
-            cursor: pointer;
-            font-weight: bold;
-            color: #1f4e79;
-        }
-    </style>
-</head>
-<body>
+
+<div class="hero">
     <h1>Query History</h1>
+    <p>
+        Browse previously saved sequence retrievals, filter them by user name,
+        protein family, or taxonomic group, and reopen any results that are
+        still available on the server.
+    </p>
+</div>
 
-    <div class="box">
-        <p>
-            This page lists previous sequence retrievals saved in the database.
-            You can filter records by user name, protein family, and taxonomic group.
-        </p>
-        <p class="small">
-            Result files are retained on the server for 60 days.
-            Older files may no longer be available even if the database entry still exists.
-        </p>
-    </div>
+<div class="box">
+    <p class="small">
+        Result files are retained on the server for 60 days. Older files may no
+        longer be available even if the database record still exists.
+    </p>
+</div>
 
-    <div class="box">
-        <h2>Filter history</h2>
-        <form class="filter-form" method="get" action="history.php">
-            <label for="user_name">User Name:</label>
-            <input id="user_name" name="user_name" type="text" value="<?php echo htmlspecialchars($filter_user); ?>">
+<div class="box">
+    <h2>Filter history</h2>
 
-            <label for="family">Protein Family:</label>
-            <input id="family" name="family" type="text" value="<?php echo htmlspecialchars($filter_family); ?>">
+    <form class="form-grid" method="get" action="history.php">
+        <label for="user_name">User name:</label>
+        <input id="user_name" name="user_name" type="text" value="<?php echo htmlspecialchars($filter_user); ?>">
 
-            <label for="taxon">Taxonomic Group:</label>
-            <input id="taxon" name="taxon" type="text" value="<?php echo htmlspecialchars($filter_taxon); ?>">
+        <label for="family">Protein family:</label>
+        <input id="family" name="family" type="text" value="<?php echo htmlspecialchars($filter_family); ?>">
 
-            <div></div>
-            <div class="button-row">
-                <input type="submit" value="Filter">
-                <a class="clear-link" href="history.php">Clear</a>
-            </div>
-        </form>
-    </div>
+        <label for="taxon">Taxonomic group:</label>
+        <input id="taxon" name="taxon" type="text" value="<?php echo htmlspecialchars($filter_taxon); ?>">
 
-    <?php if ($db_error !== ''): ?>
-        <div class="box">
-            <p class="err"><strong>Database error:</strong> <?php echo htmlspecialchars($db_error); ?></p>
+        <div></div>
+        <div class="form-actions">
+            <input type="submit" value="Filter">
+            <a href="history.php">Clear filters</a>
         </div>
+    </form>
+</div>
 
-    <?php else: ?>
+<?php if ($db_error !== ''): ?>
+    <div class="box">
+        <p class="err"><strong>Database error:</strong> <?php echo htmlspecialchars($db_error); ?></p>
+    </div>
+<?php else: ?>
 
-        <div class="box">
-            <h2>Available records</h2>
+    <div class="box">
+        <h2>Available records</h2>
 
-            <?php if (empty($available_rows)): ?>
-                <p>No currently available records were found for this filter.</p>
+        <?php if (empty($available_rows)): ?>
+            <p>No currently available records were found for this filter.</p>
+        <?php else: ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User</th>
+                        <th>Protein family</th>
+                        <th>Taxonomic group</th>
+                        <th>Saved at</th>
+                        <th>Available links</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($available_rows as $row): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars((string)$row['id']); ?></td>
+                            <td><?php echo htmlspecialchars($row['user']); ?></td>
+                            <td><?php echo htmlspecialchars($row['family']); ?></td>
+                            <td><?php echo htmlspecialchars($row['taxon']); ?></td>
+                            <td><?php echo htmlspecialchars($row['created_at']); ?></td>
+                            <td>
+                                <?php if ($row['is_example']): ?>
+                                    <div><a href="example.php">Example dataset page</a></div>
+                                    <div><a href="<?php echo htmlspecialchars($row['raw_relative']); ?>">Raw FASTA</a></div>
+                                    <?php if ($row['aligned_exists']): ?>
+                                        <div><a href="<?php echo htmlspecialchars($row['aligned_relative']); ?>">Aligned FASTA</a></div>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <div><a href="<?php echo htmlspecialchars($row['raw_relative']); ?>">Raw FASTA</a></div>
+                                    <div>
+                                        <a href="analyze.php?file=<?php echo urlencode($row['raw_relative']); ?>">
+                                            Conservation analysis
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <a href="motif.php?file=<?php echo urlencode($row['raw_relative']); ?>">
+                                            Motif scan
+                                        </a>
+                                    </div>
+                                    <?php if ($row['aligned_exists']): ?>
+                                        <div>
+                                            <a href="tree.php?file=<?php echo urlencode($row['aligned_relative']); ?>">
+                                                Phylogenetic tree
+                                            </a>
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="small">Tree link will appear after conservation output exists.</div>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
+    </div>
+
+    <div class="box">
+        <details>
+            <summary>Unavailable / expired records (<?php echo count($unavailable_rows); ?>)</summary>
+
+            <?php if (empty($unavailable_rows)): ?>
+                <p>No unavailable records were found for this filter.</p>
             <?php else: ?>
+                <p class="small">
+                    These records remain in the database as query history, but their
+                    raw FASTA files are no longer present on the server.
+                </p>
+
                 <table>
                     <thead>
                         <tr>
@@ -245,105 +259,26 @@ foreach ($rows as $row) {
                             <th>Protein family</th>
                             <th>Taxonomic group</th>
                             <th>Saved at</th>
-                            <th>Available links</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($available_rows as $row): ?>
+                        <?php foreach ($unavailable_rows as $row): ?>
                             <tr>
                                 <td><?php echo htmlspecialchars((string)$row['id']); ?></td>
                                 <td><?php echo htmlspecialchars($row['user']); ?></td>
                                 <td><?php echo htmlspecialchars($row['family']); ?></td>
                                 <td><?php echo htmlspecialchars($row['taxon']); ?></td>
                                 <td><?php echo htmlspecialchars($row['created_at']); ?></td>
-                                <td>
-                                    <?php if ($row['is_example']): ?>
-                                        <div>
-                                            <a href="example.php">Example dataset page</a>
-                                        </div>
-                                        <div>
-                                            <a href="<?php echo htmlspecialchars($row['raw_relative']); ?>">Raw FASTA</a>
-                                        </div>
-                                        <?php if ($row['aligned_exists']): ?>
-                                            <div>
-                                                <a href="<?php echo htmlspecialchars($row['aligned_relative']); ?>">Aligned FASTA</a>
-                                            </div>
-                                        <?php endif; ?>
-                                    <?php else: ?>
-                                        <div>
-                                            <a href="<?php echo htmlspecialchars($row['raw_relative']); ?>">Raw FASTA</a>
-                                        </div>
-                                        <div>
-                                            <a href="analyze.php?file=<?php echo urlencode($row['raw_relative']); ?>">
-                                                Conservation analysis
-                                            </a>
-                                        </div>
-                                        <div>
-                                            <a href="motif.php?file=<?php echo urlencode($row['raw_relative']); ?>">
-                                                Motif scan
-                                            </a>
-                                        </div>
-
-                                        <?php if ($row['aligned_exists']): ?>
-                                            <div>
-                                                <a href="tree.php?file=<?php echo urlencode($row['aligned_relative']); ?>">
-                                                    Phylogenetic tree
-                                                </a>
-                                            </div>
-                                        <?php else: ?>
-                                            <div class="small">Tree link will appear after conservation output exists.</div>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-                                </td>
+                                <td class="warn">Raw FASTA file is no longer available.</td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
             <?php endif; ?>
-        </div>
+        </details>
+    </div>
 
-        <div class="box">
-            <details>
-                <summary>Unavailable / expired records (<?php echo count($unavailable_rows); ?>)</summary>
+<?php endif; ?>
 
-                <?php if (empty($unavailable_rows)): ?>
-                    <p>No unavailable records were found for this filter.</p>
-                <?php else: ?>
-                    <p class="small">
-                        These records remain in the database as query history, but their raw FASTA files
-                        are no longer present on the server.
-                    </p>
-
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>User</th>
-                                <th>Protein family</th>
-                                <th>Taxonomic group</th>
-                                <th>Saved at</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($unavailable_rows as $row): ?>
-                                <tr>
-                                    <td><?php echo htmlspecialchars((string)$row['id']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['user']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['family']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['taxon']); ?></td>
-                                    <td><?php echo htmlspecialchars($row['created_at']); ?></td>
-                                    <td class="warn">Raw FASTA file is no longer available.</td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                <?php endif; ?>
-            </details>
-        </div>
-
-    <?php endif; ?>
-
-    <p><a href="index.php">Back to home</a></p>
-</body>
-</html>
+<?php require_once __DIR__ . '/lib/site_footer.php'; ?>

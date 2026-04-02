@@ -1,137 +1,162 @@
 <?php
+$page_title = 'Motif Scan';
+$active_page = '';
+
+$job_file = $_GET['job'] ?? '';
+$job_file = trim($job_file);
+
 $input_file = $_GET['file'] ?? '';
 $input_file = trim($input_file);
 
 $results_dir = realpath(__DIR__ . '/results');
 
 function error_page($message, $detail = '') {
+    global $page_title, $active_page;
+    require_once __DIR__ . '/lib/site_header.php';
     ?>
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Motif Scan</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                max-width: 1100px;
-                margin: 40px auto;
-                line-height: 1.6;
-                padding: 0 20px;
-            }
-            .box {
-                border: 1px solid #ccc;
-                padding: 20px;
-                border-radius: 8px;
-                background: #f9f9f9;
-                margin-bottom: 20px;
-            }
-            .err {
-                color: #a10000;
-            }
-            pre {
-                white-space: pre-wrap;
-                word-break: break-word;
-                background: #f3f3f3;
-                padding: 12px;
-                border-radius: 6px;
-                overflow-x: auto;
-            }
-        </style>
-    </head>
-    <body>
+    <div class="hero">
         <h1>Motif / Domain Scan</h1>
-        <div class="box">
-            <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($message); ?></p>
-            <?php if ($detail !== ''): ?>
-                <pre><?php echo htmlspecialchars($detail); ?></pre>
-            <?php endif; ?>
-        </div>
-        <p><a href="index.php">Back to home</a></p>
-    </body>
-    </html>
+        <p>An error occurred while loading the motif analysis result.</p>
+    </div>
+
+    <div class="box">
+        <p class="err"><strong>Error:</strong> <?php echo htmlspecialchars($message); ?></p>
+        <?php if ($detail !== ''): ?>
+            <pre><?php echo htmlspecialchars($detail); ?></pre>
+        <?php endif; ?>
+    </div>
     <?php
+    require_once __DIR__ . '/lib/site_footer.php';
     exit;
 }
 
-if ($input_file === '') {
-    error_page('No input FASTA file was provided.');
+if ($results_dir === false) {
+    error_page('Results directory not found.');
 }
 
-$relative_input = ltrim($input_file, '/');
-$absolute_input = realpath(__DIR__ . '/' . $relative_input);
-
-if ($absolute_input === false || strpos($absolute_input, $results_dir) !== 0) {
-    error_page('Invalid input file path.');
+if ($job_file === '' && $input_file === '') {
+    error_page('No motif input or job file was provided.');
 }
-
-if (!file_exists($absolute_input)) {
-    error_page('Input FASTA file does not exist.');
-}
-
-$input_basename = pathinfo($absolute_input, PATHINFO_FILENAME);
-
-$summary_basename = $input_basename . '_motif_summary.json';
-$summary_absolute = $results_dir . '/' . $summary_basename;
-$summary_relative = 'results/' . $summary_basename;
-
-$raw_basename = $input_basename . '_motif_raw.txt';
-$raw_absolute = $results_dir . '/' . $raw_basename;
-$raw_relative = 'results/' . $raw_basename;
-
-$python = '/usr/bin/python3';
-$script = __DIR__ . '/lib/motif_scan.py';
 
 $data = null;
-$scan_output = '';
 
-if (!file_exists($summary_absolute)) {
-    $command = $python . ' '
-        . escapeshellarg($script) . ' '
-        . escapeshellarg($absolute_input) . ' 2>&1';
+/*
+ * Mode 1: display from a completed job file
+ */
+if ($job_file !== '') {
+    $relative_job = ltrim($job_file, '/');
+    $absolute_job = realpath(__DIR__ . '/' . $relative_job);
 
-    $scan_output = shell_exec($command);
-    $scan_result = json_decode($scan_output, true);
-
-    if (!is_array($scan_result)) {
-        error_page('Motif scan did not return valid JSON.', $scan_output);
+    if ($absolute_job === false || strpos($absolute_job, $results_dir) !== 0) {
+        error_page('Invalid motif result file path.');
     }
 
-    if (($scan_result['status'] ?? '') !== 'ok') {
-        $msg = $scan_result['message'] ?? 'Unknown error';
-        error_page('Motif scan failed: ' . $msg, $scan_output);
+    if (!file_exists($absolute_job)) {
+        error_page('Motif result file does not exist.');
     }
 
-    file_put_contents(
-        $summary_absolute,
-        json_encode($scan_result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-    );
-
-    if (!empty($scan_result['combined_raw_report'])) {
-        file_put_contents($raw_absolute, $scan_result['combined_raw_report']);
+    $json_text = file_get_contents($absolute_job);
+    if ($json_text === false) {
+        error_page('Could not read motif result file.');
     }
 
-    $data = $scan_result;
-} else {
+    $data = json_decode($json_text, true);
+    if (!is_array($data)) {
+        error_page('Motif result JSON is invalid.');
+    }
+
+    if (($data['status'] ?? '') !== 'ok') {
+        error_page($data['message'] ?? 'Unknown error.', $data['detail'] ?? '');
+    }
+}
+
+/*
+ * Mode 2: direct access via ?file=...
+ * If cached motif outputs already exist, display them directly.
+ * Only redirect to the waiting page if motif outputs are not present yet.
+ */
+if ($data === null && $input_file !== '') {
+    $relative_input = ltrim($input_file, '/');
+    $absolute_input = realpath(__DIR__ . '/' . $relative_input);
+
+    if ($absolute_input === false || strpos($absolute_input, $results_dir) !== 0) {
+        error_page('Invalid input file path.');
+    }
+
+    if (!file_exists($absolute_input)) {
+        error_page('Input FASTA file does not exist.');
+    }
+
+    $input_basename = pathinfo($absolute_input, PATHINFO_FILENAME);
+
+    $summary_basename = $input_basename . '_motif_summary.json';
+    $summary_absolute = $results_dir . '/' . $summary_basename;
+    $summary_relative = 'results/' . $summary_basename;
+
+    $raw_basename = $input_basename . '_motif_raw.txt';
+    $raw_absolute = $results_dir . '/' . $raw_basename;
+    $raw_relative = 'results/' . $raw_basename;
+
+    if (!file_exists($summary_absolute)) {
+        header('Location: motif_status.php?file=' . urlencode($relative_input));
+        exit;
+    }
+
     $json_text = file_get_contents($summary_absolute);
     if ($json_text === false) {
         error_page('Could not read motif summary JSON file.');
     }
 
-    $data = json_decode($json_text, true);
-    if (!is_array($data)) {
+    $scan_data = json_decode($json_text, true);
+    if (!is_array($scan_data)) {
         error_page('Saved motif summary JSON is invalid.');
     }
 
-    if (!file_exists($raw_absolute) && !empty($data['combined_raw_report'])) {
-        file_put_contents($raw_absolute, $data['combined_raw_report']);
+    if (($scan_data['status'] ?? '') !== 'ok') {
+        $msg = $scan_data['message'] ?? 'Unknown error';
+        error_page('Saved motif summary JSON does not contain a successful result: ' . $msg);
     }
+
+    if (!file_exists($raw_absolute) && !empty($scan_data['combined_raw_report'])) {
+        file_put_contents($raw_absolute, $scan_data['combined_raw_report']);
+    }
+
+    $data = [
+        'status' => 'ok',
+        'message' => '',
+        'detail' => '',
+        'input_file' => $relative_input,
+        'summary_file' => $summary_relative,
+        'raw_file' => file_exists($raw_absolute) ? $raw_relative : '',
+        'sequence_count' => $scan_data['sequence_count'] ?? 0,
+        'sequences_with_hits' => $scan_data['sequences_with_hits'] ?? 0,
+        'total_hits' => $scan_data['total_hits'] ?? 0,
+        'results' => $scan_data['results'] ?? [],
+        'combined_raw_report' => $scan_data['combined_raw_report'] ?? ''
+    ];
 }
 
-if (($data['status'] ?? '') !== 'ok') {
-    error_page('Saved motif summary JSON does not contain a successful result.');
+if ($data === null) {
+    error_page('Unable to load motif result data.');
 }
+
+$raw_relative = $data['input_file'] ?? '';
+if ($raw_relative === '') {
+    error_page('Motif result data does not contain an input FASTA path.');
+}
+
+$raw_basename = pathinfo($raw_relative, PATHINFO_FILENAME);
+
+if (strpos($raw_relative, 'results/examples/') === 0) {
+    $aligned_relative = 'results/examples/aligned_' . $raw_basename . '.fasta';
+} else {
+    $aligned_relative = 'results/aligned_' . $raw_basename . '.fasta';
+}
+
+$aligned_exists = file_exists(__DIR__ . '/' . $aligned_relative);
+
+$summary_relative = $data['summary_file'] ?? '';
+$raw_report_relative = $data['raw_file'] ?? '';
 
 $sequence_count = $data['sequence_count'] ?? 0;
 $sequences_with_hits = $data['sequences_with_hits'] ?? 0;
@@ -164,182 +189,150 @@ foreach (($data['results'] ?? []) as $seq_result) {
         ];
     }
 }
+
+require_once __DIR__ . '/lib/site_header.php';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motif Scan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 1100px;
-            margin: 40px auto;
-            line-height: 1.6;
-            padding: 0 20px;
-        }
-        .box {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 8px;
-            background: #f9f9f9;
-            margin-bottom: 20px;
-        }
-        h1, h2 {
-            color: #1f4e79;
-        }
-        a {
-            color: #1f4e79;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .note {
-            color: #555;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            background: white;
-        }
-        th, td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: left;
-            vertical-align: top;
-        }
-        th {
-            background: #eaf2f8;
-        }
-        pre {
-            white-space: pre-wrap;
-            word-break: break-word;
-            background: #f3f3f3;
-            padding: 12px;
-            border-radius: 6px;
-            overflow-x: auto;
-        }
-        details {
-            margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
+
+<div class="hero">
     <h1>Motif / Domain Scan</h1>
+    <p>
+        Review PROSITE motif hits across the selected sequence set, including
+        hit counts, motif positions, and the combined raw motif report.
+    </p>
+</div>
 
-    <div class="box">
-        <h2>Input and output files</h2>
-        <p><strong>Input FASTA:</strong>
-            <a href="<?php echo htmlspecialchars($relative_input); ?>">
-                <?php echo htmlspecialchars($relative_input); ?>
+<div class="box">
+    <h2>Input and output files</h2>
+    <p><strong>Input FASTA:</strong>
+        <a href="<?php echo htmlspecialchars($raw_relative); ?>">
+            <?php echo htmlspecialchars($raw_relative); ?>
+        </a>
+    </p>
+    <p><strong>Motif summary JSON:</strong>
+        <a href="<?php echo htmlspecialchars($summary_relative); ?>">
+            <?php echo htmlspecialchars($summary_relative); ?>
+        </a>
+    </p>
+    <?php if ($raw_report_relative !== ''): ?>
+        <p><strong>Combined raw motif report:</strong>
+            <a href="<?php echo htmlspecialchars($raw_report_relative); ?>">
+                <?php echo htmlspecialchars($raw_report_relative); ?>
             </a>
         </p>
-        <p><strong>Motif summary JSON:</strong>
-            <a href="<?php echo htmlspecialchars($summary_relative); ?>">
-                <?php echo htmlspecialchars($summary_relative); ?>
+    <?php endif; ?>
+    <p class="small">
+        Result files are retained on the server for 60 days.
+        You can revisit recent analyses from the history page during this period.
+    </p>
+</div>
+
+<div class="box">
+    <h2>Scan summary</h2>
+    <p><strong>Total sequences scanned:</strong> <?php echo htmlspecialchars((string)$sequence_count); ?></p>
+    <p><strong>Sequences with motif hits:</strong> <?php echo htmlspecialchars((string)$sequences_with_hits); ?></p>
+    <p><strong>Total motif hits:</strong> <?php echo htmlspecialchars((string)$total_hits); ?></p>
+
+    <?php if ($total_hits == 0): ?>
+        <p>No PROSITE motifs were detected in this sequence set.</p>
+    <?php else: ?>
+        <p>
+            This sequence set contains PROSITE motif hits in a subset of sequences.
+            The table below lists the motif type and its position in each sequence.
+        </p>
+    <?php endif; ?>
+</div>
+
+<div class="box">
+    <h2>Sequences with motif hits</h2>
+    <?php if (empty($sequence_rows)): ?>
+        <p>No sequences with motif hits were found.</p>
+    <?php else: ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sequence ID</th>
+                    <th>Sequence length (aa)</th>
+                    <th>Hit count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($sequence_rows as $row): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['sequence_id']); ?></td>
+                        <td><?php echo htmlspecialchars((string)$row['length']); ?></td>
+                        <td><?php echo htmlspecialchars((string)$row['hit_count']); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>
+
+<div class="box">
+    <h2>Motif hit table</h2>
+    <?php if (empty($hit_rows)): ?>
+        <p>No motif hit positions are available.</p>
+    <?php else: ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>Sequence ID</th>
+                    <th>Motif</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Motif length</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($hit_rows as $row): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['sequence_id']); ?></td>
+                        <td><?php echo htmlspecialchars($row['motif']); ?></td>
+                        <td><?php echo htmlspecialchars((string)$row['start']); ?></td>
+                        <td><?php echo htmlspecialchars((string)$row['end']); ?></td>
+                        <td><?php echo htmlspecialchars((string)$row['length']); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>
+
+<div class="box">
+    <h2>Raw report</h2>
+    <?php if ($combined_raw_report === ''): ?>
+        <p>No raw report text is available.</p>
+    <?php else: ?>
+        <details>
+            <summary>Show raw combined report</summary>
+            <pre><?php echo htmlspecialchars($combined_raw_report); ?></pre>
+        </details>
+    <?php endif; ?>
+</div>
+
+<div class="box">
+    <h2>Related analyses</h2>
+    <p>
+        <a href="analyze.php?file=<?php echo urlencode($raw_relative); ?>">
+            View conservation analysis for this sequence set
+        </a>
+    </p>
+
+    <?php if ($aligned_exists): ?>
+        <p>
+            <a href="tree.php?file=<?php echo urlencode($aligned_relative); ?>">
+                Run phylogenetic tree analysis for this aligned sequence set
             </a>
         </p>
-        <?php if (file_exists($raw_absolute)): ?>
-            <p><strong>Combined raw motif report:</strong>
-                <a href="<?php echo htmlspecialchars($raw_relative); ?>">
-                    <?php echo htmlspecialchars($raw_relative); ?>
-                </a>
-            </p>
-        <?php endif; ?>
-        <p class="note">
-            Result files are retained on the server for 60 days.
-            You can revisit recent analyses from the history page during this period.
+    <?php else: ?>
+        <p class="warn">
+            Phylogenetic tree analysis requires an aligned FASTA file, which is generated
+            during conservation analysis.
+            <a href="analysis_status.php?file=<?php echo urlencode($raw_relative); ?>">
+                Run conservation analysis first
+            </a>.
         </p>
-    </div>
+    <?php endif; ?>
+</div>
 
-    <div class="box">
-        <h2>Scan summary</h2>
-        <p><strong>Total sequences scanned:</strong> <?php echo htmlspecialchars((string)$sequence_count); ?></p>
-        <p><strong>Sequences with motif hits:</strong> <?php echo htmlspecialchars((string)$sequences_with_hits); ?></p>
-        <p><strong>Total motif hits:</strong> <?php echo htmlspecialchars((string)$total_hits); ?></p>
-
-        <?php if ($total_hits == 0): ?>
-            <p>No PROSITE motifs were detected in this sequence set.</p>
-        <?php else: ?>
-            <p>
-                This sequence set contains PROSITE motif hits in a subset of sequences.
-                The table below lists the motif type and its position in each sequence.
-            </p>
-        <?php endif; ?>
-    </div>
-
-    <div class="box">
-        <h2>Sequences with motif hits</h2>
-        <?php if (empty($sequence_rows)): ?>
-            <p>No sequences with motif hits were found.</p>
-        <?php else: ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sequence ID</th>
-                        <th>Sequence length (aa)</th>
-                        <th>Hit count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($sequence_rows as $row): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($row['sequence_id']); ?></td>
-                            <td><?php echo htmlspecialchars((string)$row['length']); ?></td>
-                            <td><?php echo htmlspecialchars((string)$row['hit_count']); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-    </div>
-
-    <div class="box">
-        <h2>Motif hit table</h2>
-        <?php if (empty($hit_rows)): ?>
-            <p>No motif hit positions are available.</p>
-        <?php else: ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sequence ID</th>
-                        <th>Motif</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Motif length</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($hit_rows as $row): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($row['sequence_id']); ?></td>
-                            <td><?php echo htmlspecialchars($row['motif']); ?></td>
-                            <td><?php echo htmlspecialchars((string)$row['start']); ?></td>
-                            <td><?php echo htmlspecialchars((string)$row['end']); ?></td>
-                            <td><?php echo htmlspecialchars((string)$row['length']); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-    </div>
-
-    <div class="box">
-        <h2>Raw report</h2>
-        <?php if ($combined_raw_report === ''): ?>
-            <p>No raw report text is available.</p>
-        <?php else: ?>
-            <details>
-                <summary>Show raw combined report</summary>
-                <pre><?php echo htmlspecialchars($combined_raw_report); ?></pre>
-            </details>
-        <?php endif; ?>
-    </div>
-
-    <p><a href="index.php">Back to home</a></p>
-    <p><a href="history.php">View history</a></p>
-</body>
-</html>
+<?php require_once __DIR__ . '/lib/site_footer.php'; ?>

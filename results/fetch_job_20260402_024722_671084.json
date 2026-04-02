@@ -1,0 +1,41 @@
+{
+    "status": "ok",
+    "message": "",
+    "term": "glucose-6-phosphatase AND Aves[Organism]",
+    "sequence_count": 50,
+    "result_file": "results/glucose-6-phosphatase_Aves_20260402_034722.fasta",
+    "preview": [
+        {
+            "id": "KAN4049539.1",
+            "description": "KAN4049539.1 glucose-6-phosphatase 2 isoform 2-T4 [Gypaetus barbatus]",
+            "length": 299
+        },
+        {
+            "id": "KAN4049538.1",
+            "description": "KAN4049538.1 glucose-6-phosphatase 2 isoform 2-T3 [Gypaetus barbatus]",
+            "length": 299
+        },
+        {
+            "id": "KAN4049537.1",
+            "description": "KAN4049537.1 glucose-6-phosphatase 2 isoform 1-T2 [Gypaetus barbatus]",
+            "length": 355
+        },
+        {
+            "id": "KAN4049536.1",
+            "description": "KAN4049536.1 glucose-6-phosphatase 2 isoform 1-T1 [Gypaetus barbatus]",
+            "length": 355
+        },
+        {
+            "id": "KAN4028371.1",
+            "description": "KAN4028371.1 glucose-6-phosphatase 2 isoform 6-T8 [Taeniopygia guttata]",
+            "length": 259
+        }
+    ],
+    "user_name": "guest",
+    "family": "glucose-6-phosphatase",
+    "taxon": "Aves",
+    "max_sequences_requested": 50,
+    "raw_output": "{\"status\": \"ok\", \"term\": \"glucose-6-phosphatase AND Aves[Organism]\", \"sequence_count\": 50, \"max_sequences_requested\": 50, \"result_file\": \"results/glucose-6-phosphatase_Aves_20260402_034722.fasta\", \"preview\": [{\"id\": \"KAN4049539.1\", \"description\": \"KAN4049539.1 glucose-6-phosphatase 2 isoform 2-T4 [Gypaetus barbatus]\", \"length\": 299}, {\"id\": \"KAN4049538.1\", \"description\": \"KAN4049538.1 glucose-6-phosphatase 2 isoform 2-T3 [Gypaetus barbatus]\", \"length\": 299}, {\"id\": \"KAN4049537.1\", \"description\": \"KAN4049537.1 glucose-6-phosphatase 2 isoform 1-T2 [Gypaetus barbatus]\", \"length\": 355}, {\"id\": \"KAN4049536.1\", \"description\": \"KAN4049536.1 glucose-6-phosphatase 2 isoform 1-T1 [Gypaetus barbatus]\", \"length\": 355}, {\"id\": \"KAN4028371.1\", \"description\": \"KAN4028371.1 glucose-6-phosphatase 2 isoform 6-T8 [Taeniopygia guttata]\", \"length\": 259}]}\n",
+    "history_saved": true,
+    "history_error": ""
+}

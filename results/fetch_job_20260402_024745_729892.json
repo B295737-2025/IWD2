@@ -1,0 +1,15 @@
+{
+    "status": "empty",
+    "message": "No matching protein sequences found.",
+    "term": "aaaaaaa AND aaaa[Organism]",
+    "sequence_count": 0,
+    "result_file": "",
+    "preview": [],
+    "user_name": "guest",
+    "family": "aaaaaaa",
+    "taxon": "aaaa",
+    "max_sequences_requested": 50,
+    "raw_output": "{\"status\": \"empty\", \"term\": \"aaaaaaa AND aaaa[Organism]\", \"message\": \"No matching protein sequences found.\"}\n",
+    "history_saved": false,
+    "history_error": ""
+}
