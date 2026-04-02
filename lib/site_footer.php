@@ -7,6 +7,7 @@
         <a href="help.php">Help</a>
         <a href="about.php">About</a>
         <a href="statement_of_credits.php">Credits</a>
+        <a href="https://github.com/B295737-2025/IWD2" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
 </footer>
 </body>
