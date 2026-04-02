@@ -52,11 +52,17 @@ require_once __DIR__ . '/lib/site_header.php';
         similar, moderately conserved, or more divergent.
     </p>
     <p>
-        The main outputs include sequence count, alignment length, and average /
-        minimum / maximum pairwise identity.
+        The main outputs include sequence count, alignment length, average /
+        minimum / maximum pairwise identity, and a conservation profile plot.
+    </p>
+    <p>
+        The conservation profile plot shows how conserved each alignment column
+        is across the sequence set. Higher values usually indicate more strongly
+        conserved regions, which may correspond to functionally important parts
+        of the protein family.
     </p>
 
-    <h3>2. Motif scan</h3>
+   <h3>2. Motif scan</h3>
     <p>
         This step scans the protein sequences against PROSITE motifs using
         EMBOSS <code>patmatmotifs</code>. It helps identify known sequence
@@ -65,6 +71,12 @@ require_once __DIR__ . '/lib/site_header.php';
     <p>
         The output lists which sequences contain motif hits, the motif name, and
         the start / end positions of each hit.
+    </p>
+    <p>
+        The motif results page also includes a motif frequency chart. This
+        summarises how often each detected PROSITE motif appears across the
+        selected sequence set, which can help you see which motif types are most
+        common in the dataset.
     </p>
 
     <h3>3. Phylogenetic tree analysis</h3>
@@ -127,6 +139,15 @@ require_once __DIR__ . '/lib/site_header.php';
 
     <p><strong>Why can large jobs be slower?</strong><br>
     Larger sequence sets take longer to align, scan for motifs, and use for tree construction.</p>
+    
+    <p><strong>How should I read the conservation profile plot?</strong><br>
+    Peaks in the plot indicate alignment regions where many sequences share the
+    same amino acid. Lower regions indicate more variable parts of the dataset.</p>
+
+    <p><strong>What does the motif frequency chart mean?</strong><br>
+    It shows how many times each detected PROSITE motif appears in the scanned
+    sequence set. It is a summary view of motif composition across the dataset,
+    rather than a position-by-position sequence view.</p>
 </div>
 
 <div class="box">
@@ -135,6 +156,7 @@ require_once __DIR__ . '/lib/site_header.php';
         <a href="index.php">Home</a>
         <a href="example.php">Example Dataset</a>
         <a href="history.php">History</a>
+        <a href="about.php">About</a>
         <a href="statement_of_credits.php">Statement of Credits</a>
     </div>
 </div>
