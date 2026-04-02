@@ -108,6 +108,12 @@ $example_conservation_plot = 'results/examples/aligned_glucose-6-phosphatase_Ave
 $conservation_profile_exists = file_exists(__DIR__ . '/' . $example_conservation_profile);
 $conservation_plot_exists = file_exists(__DIR__ . '/' . $example_conservation_plot);
 
+$example_motif_stats = 'results/examples/glucose-6-phosphatase_Aves_example_motif_stats.json';
+$example_motif_stats_plot = 'results/examples/glucose-6-phosphatase_Aves_example_motif_stats.png';
+
+$motif_stats_exists = file_exists(__DIR__ . '/' . $example_motif_stats);
+$motif_stats_plot_exists = file_exists(__DIR__ . '/' . $example_motif_stats_plot);
+
 require_once __DIR__ . '/lib/site_header.php';
 ?>
 
@@ -134,7 +140,13 @@ require_once __DIR__ . '/lib/site_header.php';
             <a href="<?php echo htmlspecialchars($example_conservation_plot); ?>">Conservation plot PNG</a>
         <?php endif; ?>
         <a href="<?php echo htmlspecialchars($example_files['motif_summary']); ?>">Motif summary JSON</a>
+        <?php if ($motif_stats_exists): ?>
+            <a href="<?php echo htmlspecialchars($example_motif_stats); ?>">Motif stats JSON</a>
+        <?php endif; ?>
         <a href="<?php echo htmlspecialchars($example_files['motif_raw']); ?>">Raw motif report</a>
+        <?php if ($motif_stats_plot_exists): ?>
+            <a href="<?php echo htmlspecialchars($example_motif_stats_plot); ?>">Motif stats PNG</a>
+        <?php endif; ?>
         <a href="<?php echo htmlspecialchars($example_files['tree_newick']); ?>">Newick tree</a>
         <a href="<?php echo htmlspecialchars($example_files['tree_summary']); ?>">Tree summary JSON</a>
         <?php if ($tree_png_exists): ?>
@@ -197,6 +209,23 @@ require_once __DIR__ . '/lib/site_header.php';
                 <?php endforeach; ?>
             </tbody>
         </table>
+    <?php endif; ?>
+
+    <?php if ($motif_stats_plot_exists): ?>
+        <h3>Motif hits frequency</h3>
+        <p>
+            This bar chart summarises how often each detected PROSITE motif appears
+            across the example dataset.
+        </p>
+        <img src="<?php echo htmlspecialchars($example_motif_stats_plot); ?>" alt="Example dataset motif hits frequency plot">
+    <?php endif; ?>
+
+    <?php if ($motif_stats_exists): ?>
+        <p>
+            <a href="<?php echo htmlspecialchars($example_motif_stats); ?>">
+                Download motif counts (JSON)
+            </a>
+        </p>
     <?php endif; ?>
 
     <?php if ($motif_raw_text !== ''): ?>
