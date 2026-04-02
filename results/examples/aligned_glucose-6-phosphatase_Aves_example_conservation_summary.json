@@ -8,5 +8,9 @@
   "maximum_pairwise_identity": 100.0,
   "average_compared_sites": 295.41,
   "identity_matrix_file": "results/examples/aligned_glucose-6-phosphatase_Aves_example_identity_matrix.tsv",
+  "profile_tsv_file": "results/examples/aligned_glucose-6-phosphatase_Aves_example_conservation_profile.tsv",
+  "profile_plot_file": "results/examples/aligned_glucose-6-phosphatase_Aves_example_conservation_plot.png",
+  "profile_plot_created": true,
+  "profile_plot_error": "",
   "summary_file": "results/examples/aligned_glucose-6-phosphatase_Aves_example_conservation_summary.json"
 }

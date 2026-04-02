@@ -5,3 +5,23 @@ all_code.txt
 
 __pycache__/
 *.pyc
+
+results/fetch_job_*.json
+results/motif_job_*.json
+results/tree_job_*.json
+
+results/*.fasta
+results/*_identity_matrix.tsv
+results/*_conservation_summary.json
+results/*_conservation_profile.tsv
+results/*_conservation_plot.png
+results/*_motif_raw.txt
+results/*_motif_summary.json
+results/*_motif_stats.json
+results/*_motif_stats.png
+results/*_tree_summary.json
+results/*_nj_tree.nwk
+results/*_nj_tree.png
+
+results/.mplconfig/
+results/examples/.mplconfig/

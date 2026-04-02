@@ -1,0 +1,11 @@
+{
+  "status": "ok",
+  "motif_counts": {
+    "AMIDATION": 10,
+    "LEUCINE_ZIPPER": 1
+  },
+  "stats_file": "results/examples/glucose-6-phosphatase_Aves_example_motif_stats.json",
+  "plot_file": "results/examples/glucose-6-phosphatase_Aves_example_motif_stats.png",
+  "plot_created": true,
+  "plot_error": ""
+}

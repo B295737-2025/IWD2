@@ -27,6 +27,7 @@ function nav_class($key, $active_page) {
             <a class="<?php echo nav_class('history', $active_page); ?>" href="history.php">History</a>
             <a class="<?php echo nav_class('example', $active_page); ?>" href="example.php">Example Dataset</a>
             <a class="<?php echo nav_class('help', $active_page); ?>" href="help.php">Help</a>
+            <a class="<?php echo nav_class('about', $active_page); ?>" href="about.php">About</a>
             <a class="<?php echo nav_class('credits', $active_page); ?>" href="statement_of_credits.php">Credits</a>
         </nav>
     </div>
